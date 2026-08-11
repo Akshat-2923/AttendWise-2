@@ -1,0 +1,90 @@
+body{
+    font-family:Poppins,sans-serif;
+    background:#0f172a;
+    color:white;
+}
+
+/* LOGIN */
+
+.login-container{
+    min-height:100vh;
+    display:flex;
+}
+
+.hero-section{
+    flex:1;
+    padding:100px;
+    background:#172554;
+}
+
+.hero-section h1{
+    font-size:64px;
+    font-weight:700;
+}
+
+.hero-section p{
+    font-size:20px;
+    margin-top:20px;
+}
+
+.hero-section ul{
+    margin-top:40px;
+}
+
+.hero-section li{
+    margin-bottom:15px;
+}
+
+.login-card{
+    width:450px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:50px;
+    background:#1e293b;
+}
+
+.login-card input{
+    width:100%;
+    margin-bottom:15px;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+}
+
+.login-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+}
+
+.captcha-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.captcha-box img{
+    height:60px;
+}
+
+/* DASHBOARD */
+
+.custom-navbar{
+    background:#1e293b;
+}
+
+.stat-card{
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+}
+
+.attendance-card{
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+}

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% include 'partials/pwa_head.html' %}
+  <title>AttendWise — Subject Detail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0d0f14; --surface:#13161d; --surface2:#181c26;
+      --border:#1f2330; --border-hi:#2e3347;
+      --accent:#4f6ef7; --success:#3ecf8e; --warning:#f5a623; --danger:#f05c5c;
+      --text:#e4e6f0; --muted:#6b7191;
+      --mono:'JetBrains Mono',monospace; --sans:'Inter',sans-serif;
+    }
+    html,body { background:var(--bg); color:var(--text); font-family:var(--sans); font-size:14px; min-height:100vh; }
+
+    nav {
+      height:56px; background:var(--surface); border-bottom:1px solid var(--border);
+      display:flex; align-items:center; padding:0 28px; position:sticky; top:0; z-index:100; gap:32px;
+    }
+    .nav-brand { font-family:var(--mono); font-size:13px; font-weight:500; letter-spacing:.1em; color:var(--accent); text-decoration:none; text-transform:uppercase; }
+    .nav-links { display:flex; gap:4px; flex:1; }
+    .nav-link { padding:6px 14px; border-radius:6px; font-size:13px; font-weight:500; color:var(--muted); text-decoration:none; transition:color .15s,background .15s; }
+    .nav-link:hover { color:var(--text); background:var(--border); }
+
+    .page { padding:28px; max-width:1000px; margin:0 auto; }
+
+    /* Back button */
+    .back-btn {
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:13px; color:var(--muted); text-decoration:none;
+      margin-bottom:24px; transition:color .15s;
+    }
+    .back-btn:hover { color:var(--text); }
+
+    /* Subject hero */
+    .subject-hero {
+      background:var(--surface); border:1px solid var(--border); border-radius:16px;
+      padding:28px 32px; margin-bottom:20px;
+      display:grid; grid-template-columns:1fr auto; align-items:start; gap:24px;
+    }
+    .subject-code { font-family:var(--mono); font-size:12px; color:var(--accent); margin-bottom:6px; }
+    .subject-name { font-size:22px; font-weight:700; letter-spacing:-.02em; margin-bottom:4px; }
+    .subject-faculty { font-size:13px; color:var(--muted); }
+
+    .pct-display {
+      text-align:right;
+    }
+    .pct-number {
+      font-family:var(--mono); font-size:40px; font-weight:700; line-height:1;
+    }
+    .pct-label { font-size:11px; color:var(--muted); margin-top:4px; }
+
+    .pill {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; margin-top:10px;
+    }
+    .pill::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+    .pill.safe  { background:rgba(62,207,142,.12); color:var(--success); }
+    .pill.risk  { background:rgba(240,92,92,.12);  color:var(--danger); }
+    .pill.warn  { background:rgba(245,166,35,.12); color:var(--warning); }
+
+    /* Stats row */
+    .stats-row {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;
+    }
+    .stat-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px;
+    }
+    .stat-label { font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .stat-value { font-family:var(--mono); font-size:24px; font-weight:700; }
+    .stat-value.green { color:var(--success); }
+    .stat-value.red   { color:var(--danger); }
+    .stat-value.blue  { color:var(--accent); }
+    .stat-sub { font-size:11px; color:var(--muted); margin-top:4px; }
+
+    /* Card */
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px; margin-bottom:16px; }
+    .card-title { font-size:13px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; margin-bottom:16px; }
+
+    /* Progress bar */
+    .prog-wrap { margin-bottom:16px; }
+    .prog-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12px; color:var(--muted); }
+    .prog-bar { height:8px; background:var(--border); border-radius:99px; overflow:hidden; }
+    .prog-fill { height:100%; border-radius:99px; transition:width .8s ease; }
+    .threshold-marker {
+      position:relative; margin-top:6px;
+    }
+    .threshold-line {
+      position:absolute; top:-22px; width:2px; height:16px;
+      background:var(--warning); border-radius:1px;
+    }
+    .threshold-text {
+      position:absolute; top:-34px; font-size:10px; color:var(--warning);
+      transform:translateX(-50%); white-space:nowrap;
+    }
+
+    /* Scenario table */
+    .scenario-table { width:100%; border-collapse:collapse; }
+    .scenario-table th {
+      font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+      color:var(--muted); padding:0 12px 10px; text-align:left; border-bottom:1px solid var(--border);
+    }
+    .scenario-table td { padding:11px 12px; font-size:13px; border-bottom:1px solid var(--border); }
+    .scenario-table tr:last-child td { border-bottom:none; }
+    .scenario-table tr:hover td { background:var(--surface2); }
+    td.mono { font-family:var(--mono); }
+    td.green { color:var(--success); font-family:var(--mono); font-weight:600; }
+    td.red   { color:var(--danger);  font-family:var(--mono); font-weight:600; }
+    td.muted { color:var(--muted);   font-family:var(--mono); }
+
+    /* Loading */
+    .loading { color:var(--muted); padding:48px; text-align:center; }
+
+    @media (max-width:640px) {
+      .stats-row { grid-template-columns:1fr 1fr; }
+      .subject-hero { grid-template-columns:1fr; }
+      .pct-display { text-align:left; }
+      .page { padding:16px; }
+    }
+  </style>
+</head>
+<body>
+
+{% set page = 'subject' %}
+{% include 'partials/nav.html' %}
+
+<div class="page">
+  <a class="back-btn" href="/dashboard">← Back to Dashboard</a>
+
+  <div id="content"><div class="loading">Loading subject data…</div></div>
+</div>
+
+<script>
+const code = new URLSearchParams(location.search).get('code');
+if (!code) location.href = '/dashboard';
+
+fetch('/api/subject/' + encodeURIComponent(code))
+  .then(r => r.json())
+  .then(d => render(d))
+  .catch(() => {
+    document.getElementById('content').innerHTML =
+      '<div class="loading">Failed to load subject data.</div>';
+  });
+
+function pctColor(p) {
+  return p >= 80 ? 'var(--success)' : p >= 75 ? 'var(--warning)' : 'var(--danger)';
+}
+
+function pillClass(status) {
+  if (status === 'Safe') return 'safe';
+  if (status === 'Below Threshold') return 'risk';
+  return 'warn';
+}
+
+function render(d) {
+  const pct   = parseFloat(d.percentage);
+  const color = pctColor(pct);
+  const pCls  = pillClass(d.status);
+
+  // Scenario rows: what happens if they attend/miss next N classes
+  const scenarios = buildScenarios(d.conducted, d.attended);
+
+  document.getElementById('content').innerHTML = `
+    <!-- Hero -->
+    <div class="subject-hero">
+      <div>
+        <div class="subject-code">${d.code}</div>
+        <div class="subject-name">${d.subject}</div>
+        <div class="subject-faculty">${d.faculty || '—'}</div>
+        <span class="pill ${pCls}">${d.status}</span>
+      </div>
+      <div class="pct-display">
+        <div class="pct-number" style="color:${color}">${pct}%</div>
+        <div class="pct-label">${d.attended} / ${d.conducted} classes</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Bunk Budget</div>
+        <div class="stat-value ${d.bunk_budget > 0 ? 'green' : 'red'}">${d.bunk_budget}</div>
+        <div class="stat-sub">classes you can skip</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Recovery Needed</div>
+        <div class="stat-value ${d.recovery_classes > 0 ? 'red' : 'green'}">${d.recovery_classes}</div>
+        <div class="stat-sub">classes to reach 75%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Conducted</div>
+        <div class="stat-value blue">${d.conducted}</div>
+        <div class="stat-sub">total so far</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Attended</div>
+        <div class="stat-value blue">${d.attended}</div>
+        <div class="stat-sub">out of conducted</div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="card">
+      <div class="card-title">Attendance Progress</div>
+      <div class="prog-wrap">
+        <div class="prog-header">
+          <span>Current: ${pct}%</span>
+          <span>75% threshold</span>
+        </div>
+        <div style="position:relative">
+          <div class="prog-bar">
+            <div class="prog-fill" style="width:${Math.min(pct,100)}%; background:${color}"></div>
+          </div>
+          <div class="threshold-marker">
+            <div class="threshold-line" style="left:75%"></div>
+            <div class="threshold-text" style="left:75%">75%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenarios -->
+    <div class="card">
+      <div class="card-title">What-If Scenarios</div>
+      <table class="scenario-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Classes Attended</th>
+            <th>Total Conducted</th>
+            <th>New %</th>
+            <th>Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${scenarios.map(s => `
+            <tr>
+              <td>${s.label}</td>
+              <td class="mono">${s.attended}</td>
+              <td class="mono">${s.conducted}</td>
+              <td class="${s.newPct >= 75 ? 'green' : 'red'}">${s.newPct}%</td>
+              <td class="${s.delta >= 0 ? 'green' : 'red'}">${s.delta >= 0 ? '+' : ''}${s.delta}%</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function buildScenarios(conducted, attended) {
+  const base = conducted > 0 ? parseFloat(((attended / conducted) * 100).toFixed(2)) : 0;
+  const rows = [];
+
+  // Attend next 1,2,3,5,10
+  [1,2,3,5,10].forEach(n => {
+    const newA = attended + n, newC = conducted + n;
+    const newPct = parseFloat(((newA / newC) * 100).toFixed(2));
+    rows.push({ label:`Attend next ${n}`, attended:newA, conducted:newC, newPct, delta:parseFloat((newPct-base).toFixed(2)) });
+  });
+
+  // Miss next 1,2,3,5
+  [1,2,3,5].forEach(n => {
+    const newA = attended, newC = conducted + n;
+    const newPct = parseFloat(((newA / newC) * 100).toFixed(2));
+    rows.push({ label:`Miss next ${n}`, attended:newA, conducted:newC, newPct, delta:parseFloat((newPct-base).toFixed(2)) });
+  });
+
+  return rows;
+}
+</script>
+{% include 'partials/pwa_sw.html' %}
+</body>
+</html>

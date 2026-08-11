@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% include 'partials/pwa_head.html' %}
+    <title>AttendWise — Health Score</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #0d0f14;
+        --surface: #13161d;
+        --surface2: #181c26;
+        --border: #1f2330;
+        --border-hi: #2e3347;
+        --accent: #4f6ef7;
+        --success: #3ecf8e;
+        --warning: #f5a623;
+        --danger: #f05c5c;
+        --text: #e4e6f0;
+        --muted: #6b7191;
+        --mono: "JetBrains Mono", monospace;
+        --sans: "Inter", sans-serif;
+      }
+      html,
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 14px;
+        min-height: 100vh;
+      }
+
+      nav {
+        height: 56px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        padding: 0 28px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        gap: 32px;
+      }
+      .nav-brand {
+        font-family: var(--mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+      .nav-links {
+        display: flex;
+        gap: 4px;
+        flex: 1;
+      }
+      .nav-link {
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        text-decoration: none;
+        transition:
+          color 0.15s,
+          background 0.15s;
+      }
+      .nav-link:hover,
+      .nav-link.active {
+        color: var(--text);
+        background: var(--border);
+      }
+      .nav-link.active {
+        color: var(--accent);
+      }
+
+      .page {
+        padding: 28px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .page-header {
+        margin-bottom: 28px;
+      }
+      .page-header h1 {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .page-header p {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* ── Score hero ── */
+      .score-hero {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 36px;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 40px;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .score-ring-wrap {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        flex-shrink: 0;
+      }
+      .score-ring-wrap svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+      .score-ring-bg {
+        fill: none;
+        stroke: var(--border);
+        stroke-width: 10;
+      }
+      .score-ring-fill {
+        fill: none;
+        stroke-width: 10;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 1s ease;
+      }
+      .score-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .score-number {
+        font-family: var(--mono);
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .score-grade {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+
+      .score-info h2 {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 6px;
+      }
+      .score-info p {
+        font-size: 13.5px;
+        color: var(--muted);
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+
+      .components-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+      }
+      .comp-cell {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px;
+        text-align: center;
+      }
+      .comp-val {
+        font-family: var(--mono);
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .comp-max {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .comp-lbl {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+        line-height: 1.3;
+      }
+
+      /* ── Cards row ── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 22px;
+      }
+      .card-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-bottom: 16px;
+      }
+
+      /* highlight cards */
+      .highlight-card {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .highlight-icon {
+        font-size: 28px;
+      }
+      .highlight-label {
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
+      }
+      .highlight-subject {
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .highlight-pct {
+        font-family: var(--mono);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+
+      /* ── Subject score list ── */
+      .subj-row {
+        display: grid;
+        grid-template-columns: 1fr 80px 36px;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .subj-row:last-child {
+        border-bottom: none;
+      }
+      .subj-name {
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .subj-code {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .subj-bar-wrap {
+        position: relative;
+      }
+      .subj-bar-bg {
+        height: 6px;
+        background: var(--border);
+        border-radius: 99px;
+        overflow: hidden;
+      }
+      .subj-bar-fill {
+        height: 100%;
+        border-radius: 99px;
+        transition: width 0.6s ease;
+      }
+      .subj-score-lbl {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 3px;
+        text-align: right;
+      }
+
+      .grade-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 13px;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 768px) {
+        .score-hero {
+          grid-template-columns: 1fr;
+        }
+        .score-ring-wrap {
+          margin: 0 auto;
+        }
+        .components-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+        .page {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% set page = 'health' %}
+    {% include 'partials/nav.html' %}
+
+    <div class="page">
+      <div class="page-header">
+        <h1>Attendance Health Score</h1>
+        <p>
+          An overall score across all your subjects — updated live from
+          uConnect.
+        </p>
+      </div>
+
+      <!-- Score hero -->
+      <div class="score-hero" id="scoreHero">
+        <div class="score-ring-wrap">
+          <svg viewBox="0 0 160 160">
+            <circle class="score-ring-bg" cx="80" cy="80" r="70" />
+            <circle
+              class="score-ring-fill"
+              id="ringFill"
+              cx="80"
+              cy="80"
+              r="70"
+              stroke-dasharray="439.82"
+              stroke-dashoffset="439.82"
+              stroke="#4f6ef7"
+            />
+          </svg>
+          <div class="score-center">
+            <div class="score-number" id="scoreNum">—</div>
+            <div class="score-grade" id="scoreGrade">—</div>
+          </div>
+        </div>
+
+        <div class="score-info">
+          <h2 id="scoreLabel">Loading…</h2>
+          <p id="scoreDesc">Calculating your attendance health score…</p>
+          <div class="components-grid" id="compGrid"></div>
+        </div>
+      </div>
+
+      <!-- Highlights -->
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Strongest Subject</div>
+          <div class="highlight-card" id="strongest">
+            <div class="highlight-icon">🏆</div>
+            <div>
+              <div class="highlight-label">Best attendance</div>
+              <div class="highlight-subject" id="strongName">—</div>
+              <div
+                class="highlight-pct"
+                id="strongPct"
+                style="color: var(--success)"
+              >
+                —
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Needs Attention</div>
+          <div class="highlight-card" id="weakest">
+            <div class="highlight-icon">⚠️</div>
+            <div>
+              <div class="highlight-label">Lowest score</div>
+              <div class="highlight-subject" id="weakName">—</div>
+              <div
+                class="highlight-pct"
+                id="weakPct"
+                style="color: var(--danger)"
+              >
+                —
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subject breakdown -->
+      <div class="card">
+        <div class="card-title">Subject Breakdown</div>
+        <div id="subjList"></div>
+      </div>
+    </div>
+
+    <script>
+      const COMP_META = [
+        { key: "avg_attendance", label: "Avg Attend.", max: 40 },
+        { key: "subjects_safe", label: "Safe Subjs", max: 25 },
+        { key: "buffer_zone", label: "Buffer Zone", max: 15 },
+        { key: "zero_recovery", label: "No Recovery", max: 10 },
+        { key: "bunk_headroom", label: "Bunk Room", max: 10 },
+      ];
+
+      fetch("/api/health")
+        .then((r) => r.json())
+        .then((d) => {
+          // Ring
+          const circumference = 439.82;
+          const offset = circumference - (d.score / 100) * circumference;
+          const ring = document.getElementById("ringFill");
+          ring.style.stroke = d.color;
+          setTimeout(() => (ring.style.strokeDashoffset = offset), 100);
+
+          document.getElementById("scoreNum").textContent = d.score;
+          document.getElementById("scoreNum").style.color = d.color;
+          document.getElementById("scoreGrade").textContent =
+            "Grade " + d.grade;
+          document.getElementById("scoreGrade").style.color = d.color;
+          document.getElementById("scoreLabel").textContent =
+            d.grade_label + " Attendance";
+
+          const s = d.stats;
+          document.getElementById("scoreDesc").textContent =
+            `${s.above_75} of ${s.total_subjects} subjects above 75% · Average ${s.avg_percentage}% · Avg bunk budget ${s.avg_bunk_budget}`;
+
+          // Components
+          document.getElementById("compGrid").innerHTML = COMP_META.map(
+            (m) => `
+      <div class="comp-cell">
+        <div class="comp-val" style="color:${d.color}">${d.components[m.key]}</div>
+        <div class="comp-max">/ ${m.max}</div>
+        <div class="comp-lbl">${m.label}</div>
+      </div>`,
+          ).join("");
+
+          // Highlights
+          if (d.strongest_subject) {
+            document.getElementById("strongName").textContent =
+              d.strongest_subject.subject;
+            document.getElementById("strongPct").textContent =
+              d.strongest_subject.percentage +
+              "% · Score " +
+              d.strongest_subject.score;
+          }
+          if (d.weakest_subject) {
+            document.getElementById("weakName").textContent =
+              d.weakest_subject.subject;
+            document.getElementById("weakPct").textContent =
+              d.weakest_subject.percentage +
+              "% · Score " +
+              d.weakest_subject.score;
+          }
+
+          // Subject list
+          const sorted = [...d.subject_scores].sort(
+            (a, b) => b.score - a.score,
+          );
+          document.getElementById("subjList").innerHTML = sorted
+            .map(
+              (s) => `
+      <div class="subj-row">
+        <div>
+          <div class="subj-name">${s.subject}</div>
+          <div class="subj-code">${s.code} · ${s.percentage}% · ${s.bunk_budget} bunks left</div>
+        </div>
+        <div class="subj-bar-wrap">
+          <div class="subj-bar-bg">
+            <div class="subj-bar-fill" style="width:${s.score}%; background:${s.color}"></div>
+          </div>
+          <div class="subj-score-lbl">${s.score}/100</div>
+        </div>
+        <div class="grade-badge" style="background:${s.color}22; color:${s.color}">${s.grade}</div>
+      </div>`,
+            )
+            .join("");
+        })
+        .catch(() => {
+          document.getElementById("scoreLabel").textContent = "Failed to load";
+        });
+    </script>
+  {% include 'partials/pwa_sw.html' %}
+  </body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% include 'partials/pwa_head.html' %}
+  <title>AttendWise — What-If Simulator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0d0f14; --surface:#13161d; --surface2:#181c26;
+      --border:#1f2330; --border-hi:#2e3347;
+      --accent:#4f6ef7; --success:#3ecf8e; --warning:#f5a623; --danger:#f05c5c;
+      --text:#e4e6f0; --muted:#6b7191;
+      --mono:'JetBrains Mono',monospace; --sans:'Inter',sans-serif;
+    }
+    html,body { background:var(--bg); color:var(--text); font-family:var(--sans); font-size:14px; min-height:100vh; }
+
+    nav {
+      height:56px; background:var(--surface); border-bottom:1px solid var(--border);
+      display:flex; align-items:center; padding:0 28px; position:sticky; top:0; z-index:100; gap:32px;
+    }
+    .nav-brand { font-family:var(--mono); font-size:13px; font-weight:500; letter-spacing:.1em; color:var(--accent); text-decoration:none; text-transform:uppercase; }
+    .nav-links { display:flex; gap:4px; flex:1; }
+    .nav-link { padding:6px 14px; border-radius:6px; font-size:13px; font-weight:500; color:var(--muted); text-decoration:none; transition:color .15s,background .15s; }
+    .nav-link:hover { color:var(--text); background:var(--border); }
+    .nav-link.active { color:var(--accent); background:var(--border); }
+
+    .page { padding:28px; max-width:1100px; margin:0 auto; }
+    .page-header { margin-bottom:28px; }
+    .page-header h1 { font-size:20px; font-weight:700; letter-spacing:-.02em; }
+    .page-header p { font-size:13px; color:var(--muted); margin-top:4px; }
+
+    /* ── Quick scenarios ── */
+    .quick-strip {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px;
+    }
+    .quick-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px;
+      text-align:center;
+    }
+    .quick-label { font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .quick-value { font-family:var(--mono); font-size:22px; font-weight:700; }
+    .quick-sub { font-size:11px; color:var(--muted); margin-top:4px; }
+
+    /* ── Detail panel ── */
+    .detail-panel {
+      background:var(--surface); border:1px solid var(--border); border-radius:16px;
+      padding:28px; margin-bottom:24px; display:none;
+    }
+    .detail-panel.visible { display:block; }
+
+    .dp-header {
+      display:flex; justify-content:space-between; align-items:flex-start;
+      margin-bottom:24px; flex-wrap:wrap; gap:12px;
+    }
+    .dp-title { font-size:18px; font-weight:700; letter-spacing:-.01em; }
+    .dp-sub { font-size:13px; color:var(--muted); margin-top:4px; }
+
+    /* Slider section */
+    .sliders-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; }
+    .slider-group { }
+    .slider-label {
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:13px; margin-bottom:10px;
+    }
+    .slider-label span { font-family:var(--mono); font-size:16px; font-weight:700; }
+    .slider-label .attend-val { color:var(--success); }
+    .slider-label .miss-val { color:var(--danger); }
+
+    input[type=range] { width:100%; accent-color:var(--accent); height:4px; cursor:pointer; }
+    input[type=range].attend-range { accent-color:var(--success); }
+    input[type=range].miss-range { accent-color:var(--danger); }
+
+    /* Result display */
+    .sim-result {
+      padding:20px 24px; border-radius:12px; border:1px solid var(--border);
+      background:var(--bg); margin-bottom:24px;
+      display:grid; grid-template-columns:1fr 1fr auto; gap:20px; align-items:center;
+    }
+    .sim-pct { font-family:var(--mono); font-size:32px; font-weight:700; }
+    .sim-delta { font-size:13px; color:var(--muted); margin-top:4px; }
+    .sim-stats { display:flex; flex-direction:column; gap:6px; }
+    .sim-stat-row { display:flex; justify-content:space-between; align-items:center; gap:16px; font-size:12px; }
+    .sim-stat-label { color:var(--muted); }
+    .sim-stat-value { font-family:var(--mono); font-weight:600; }
+
+    .verdict-pill {
+      font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+      padding:8px 20px; border-radius:10px; white-space:nowrap; text-align:center;
+    }
+    .verdict-pill.safe { background:rgba(62,207,142,.15); color:var(--success); }
+    .verdict-pill.borderline { background:rgba(245,166,35,.15); color:var(--warning); }
+    .verdict-pill.danger { background:rgba(240,92,92,.15); color:var(--danger); }
+
+    .chart-wrap { height:220px; position:relative; margin-bottom:20px; }
+
+    .close-btn {
+      background:var(--border); border:none; color:var(--muted);
+      padding:6px 14px; border-radius:8px; cursor:pointer; font-size:13px;
+    }
+    .close-btn:hover { color:var(--text); }
+
+    /* ── Subject grid ── */
+    .subject-grid {
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:14px;
+    }
+    .subject-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:12px;
+      padding:18px 20px; cursor:pointer; transition:border-color .15s;
+    }
+    .subject-card:hover { border-color:var(--border-hi); }
+    .subject-card.selected { border-color:var(--accent); }
+
+    .sc-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+    .sc-name { font-size:13px; font-weight:600; line-height:1.3; }
+    .sc-code { font-family:var(--mono); font-size:11px; color:var(--accent); margin-top:3px; }
+    .sc-pct { font-family:var(--mono); font-size:18px; font-weight:700; text-align:right; }
+    .sc-pct-sub { font-size:10px; color:var(--muted); text-align:right; margin-top:3px; }
+
+    .sc-bar { height:4px; background:var(--border); border-radius:99px; overflow:hidden; margin-bottom:10px; }
+    .sc-bar-fill { height:100%; border-radius:99px; }
+
+    .sc-footer { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); }
+
+    .pill {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600;
+    }
+    .pill::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+    .pill.safe { background:rgba(62,207,142,.12); color:var(--success); }
+    .pill.risk { background:rgba(240,92,92,.12); color:var(--danger); }
+    .pill.warn { background:rgba(245,166,35,.12); color:var(--warning); }
+
+    .loading { color:var(--muted); padding:48px; text-align:center; }
+
+    @media (max-width:768px) {
+      .sliders-row { grid-template-columns:1fr; }
+      .sim-result { grid-template-columns:1fr; }
+      .quick-strip { grid-template-columns:1fr 1fr; }
+      .page { padding:16px; }
+    }
+  </style>
+</head>
+<body>
+
+{% set page = 'what-if' %}
+{% include 'partials/nav.html' %}
+
+<div class="page">
+  <div class="page-header">
+    <h1>What-If Simulator</h1>
+    <p>Simulate attending or missing your next classes and see the impact on each subject.</p>
+  </div>
+
+  <!-- Quick scenarios (shown when a subject is selected) -->
+  <div class="quick-strip" id="quickStrip" style="display:none">
+    <div class="quick-card">
+      <div class="quick-label">Attend Next 5</div>
+      <div class="quick-value" id="qAttend5" style="color:var(--success)">—</div>
+      <div class="quick-sub" id="qAttend5Sub">—</div>
+    </div>
+    <div class="quick-card">
+      <div class="quick-label">Miss Next 5</div>
+      <div class="quick-value" id="qMiss5" style="color:var(--danger)">—</div>
+      <div class="quick-sub" id="qMiss5Sub">—</div>
+    </div>
+    <div class="quick-card">
+      <div class="quick-label">Attend Until Safe</div>
+      <div class="quick-value" id="qRecovery" style="color:var(--accent)">—</div>
+      <div class="quick-sub" id="qRecoverySub">classes needed</div>
+    </div>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="dp-header">
+      <div>
+        <div class="dp-title" id="dpTitle">—</div>
+        <div class="dp-sub" id="dpSub">—</div>
+      </div>
+      <button class="close-btn" onclick="closeDetail()">Close</button>
+    </div>
+
+    <!-- Sliders -->
+    <div class="sliders-row">
+      <div class="slider-group">
+        <div class="slider-label">
+          Classes to attend: <span class="attend-val" id="attendVal">0</span>
+        </div>
+        <input type="range" class="attend-range" id="attendSlider" min="0" max="20" value="0" oninput="updateSim()" />
+      </div>
+      <div class="slider-group">
+        <div class="slider-label">
+          Classes to miss: <span class="miss-val" id="missVal">0</span>
+        </div>
+        <input type="range" class="miss-range" id="missSlider" min="0" max="20" value="0" oninput="updateSim()" />
+      </div>
+    </div>
+
+    <!-- Live result -->
+    <div class="sim-result" id="simResult">
+      <div>
+        <div class="sim-pct" id="simPct">—%</div>
+        <div class="sim-delta" id="simDelta">—</div>
+      </div>
+      <div class="sim-stats">
+        <div class="sim-stat-row">
+          <span class="sim-stat-label">Bunk Budget</span>
+          <span class="sim-stat-value" id="simBudget">—</span>
+        </div>
+        <div class="sim-stat-row">
+          <span class="sim-stat-label">Recovery Needed</span>
+          <span class="sim-stat-value" id="simRecovery">—</span>
+        </div>
+      </div>
+      <div class="verdict-pill" id="simVerdict">—</div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-wrap"><canvas id="whatIfChart"></canvas></div>
+  </div>
+
+  <!-- Subject cards -->
+  <div class="subject-grid" id="subjectGrid">
+    <div class="loading">Loading subject data...</div>
+  </div>
+</div>
+
+<script>
+let subjects = [];
+let activeIdx = null;
+let chart = null;
+
+function pctColor(p) {
+  return p >= 80 ? 'var(--success)' : p >= 75 ? 'var(--warning)' : 'var(--danger)';
+}
+
+function statusPill(status) {
+  if (status === 'Safe') return 'safe';
+  if (status === 'Below Threshold') return 'risk';
+  return 'warn';
+}
+
+fetch('/api/what-if')
+  .then(r => r.json())
+  .then(data => {
+    subjects = data;
+    renderCards(data);
+  })
+  .catch(() => {
+    document.getElementById('subjectGrid').innerHTML =
+      '<div class="loading" style="color:var(--danger)">Failed to load data.</div>';
+  });
+
+function renderCards(data) {
+  document.getElementById('subjectGrid').innerHTML = data.map((s, i) => {
+    const color = pctColor(s.percentage);
+    const pCls = statusPill(s.status);
+    return `
+      <div class="subject-card" id="card-${i}" onclick="openDetail(${i})">
+        <div class="sc-header">
+          <div>
+            <div class="sc-name">${s.subject}</div>
+            <div class="sc-code">${s.code}</div>
+          </div>
+          <div>
+            <div class="sc-pct" style="color:${color}">${s.percentage}%</div>
+            <div class="sc-pct-sub">${s.attended}/${s.conducted}</div>
+          </div>
+        </div>
+        <div class="sc-bar"><div class="sc-bar-fill" style="width:${Math.min(s.percentage,100)}%;background:${color}"></div></div>
+        <div class="sc-footer">
+          <span>Budget: ${s.bunk_budget}</span>
+          <span class="pill ${pCls}">${s.status}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openDetail(i) {
+  activeIdx = i;
+  const s = subjects[i];
+  const wif = s.what_if;
+
+  document.querySelectorAll('.subject-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('card-' + i).classList.add('selected');
+
+  document.getElementById('dpTitle').textContent = s.subject;
+  document.getElementById('dpSub').textContent = `${s.code} \u00B7 ${s.attended}/${s.conducted} attended \u00B7 ${s.percentage}% current`;
+
+  // Quick scenarios
+  const a5 = wif.attend[4]; // attend 5
+  const m5 = wif.miss[4];   // miss 5
+  document.getElementById('qAttend5').textContent = a5.new_percent + '%';
+  document.getElementById('qAttend5Sub').textContent = (a5.delta >= 0 ? '+' : '') + a5.delta + '% change';
+  document.getElementById('qMiss5').textContent = m5.new_percent + '%';
+  document.getElementById('qMiss5Sub').textContent = (m5.delta >= 0 ? '+' : '') + m5.delta + '% change';
+  document.getElementById('qRecovery').textContent = s.recovery_classes;
+  document.getElementById('qRecoverySub').textContent =
+    s.recovery_classes === 0 ? 'already safe' : 'classes needed';
+  document.getElementById('quickStrip').style.display = 'grid';
+
+  // Reset sliders
+  document.getElementById('attendSlider').value = 0;
+  document.getElementById('missSlider').value = 0;
+  updateSim();
+
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('visible');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('visible');
+  document.getElementById('quickStrip').style.display = 'none';
+  document.querySelectorAll('.subject-card').forEach(c => c.classList.remove('selected'));
+  activeIdx = null;
+  if (chart) { chart.destroy(); chart = null; }
+}
+
+function updateSim() {
+  if (activeIdx === null) return;
+  const s = subjects[activeIdx];
+  const wif = s.what_if;
+  const attendN = parseInt(document.getElementById('attendSlider').value);
+  const missN = parseInt(document.getElementById('missSlider').value);
+
+  document.getElementById('attendVal').textContent = attendN;
+  document.getElementById('missVal').textContent = missN;
+
+  // Compute combined result: attend N then miss M
+  const totalNew = s.conducted + attendN + missN;
+  const attendedNew = s.attended + attendN;
+  const newPct = totalNew > 0 ? parseFloat(((attendedNew / totalNew) * 100).toFixed(2)) : 0;
+  const delta = parseFloat((newPct - s.percentage).toFixed(2));
+
+  // Get budget/recovery from the pre-computed table where possible
+  let budget = 0, recovery = 0, status = 'Danger';
+
+  if (missN === 0 && attendN > 0 && attendN <= wif.attend.length) {
+    const r = wif.attend[attendN - 1];
+    budget = r.bunk_budget;
+    recovery = r.recovery_needed;
+    status = r.status;
+  } else if (attendN === 0 && missN > 0 && missN <= wif.miss.length) {
+    const r = wif.miss[missN - 1];
+    budget = r.bunk_budget;
+    recovery = r.recovery_needed;
+    status = r.status;
+  } else {
+    // Mixed scenario: compute client-side
+    const t = 0.75;
+    budget = Math.max(0, Math.floor((attendedNew / t) - totalNew));
+    if (newPct >= 75) {
+      recovery = 0;
+    } else {
+      recovery = Math.max(0, Math.ceil((t * totalNew - attendedNew) / (1 - t)));
+    }
+    status = newPct >= 80 && budget >= 2 ? 'Safe' : newPct >= 75 ? 'Borderline' : 'Danger';
+  }
+
+  // If both are 0, show current
+  if (attendN === 0 && missN === 0) {
+    budget = wif.current.bunk_budget;
+    recovery = wif.current.recovery_needed;
+    status = s.percentage >= 80 ? 'Safe' : s.percentage >= 75 ? 'Borderline' : 'Danger';
+  }
+
+  const pctEl = document.getElementById('simPct');
+  pctEl.textContent = newPct + '%';
+  pctEl.style.color = pctColor(newPct);
+
+  const deltaText = attendN === 0 && missN === 0
+    ? 'Current attendance'
+    : `After attending ${attendN} and missing ${missN} \u00B7 ${delta >= 0 ? '+' : ''}${delta}% change`;
+  document.getElementById('simDelta').textContent = deltaText;
+
+  document.getElementById('simBudget').textContent = budget;
+  document.getElementById('simBudget').style.color = budget > 0 ? 'var(--success)' : 'var(--danger)';
+  document.getElementById('simRecovery').textContent = recovery;
+  document.getElementById('simRecovery').style.color = recovery > 0 ? 'var(--danger)' : 'var(--success)';
+
+  const verdictEl = document.getElementById('simVerdict');
+  verdictEl.textContent = status;
+  verdictEl.className = 'verdict-pill ' + status.toLowerCase();
+
+  // Update chart
+  renderChart(s, newPct);
+}
+
+function renderChart(s, newPct) {
+  if (chart) chart.destroy();
+
+  chart = new Chart(document.getElementById('whatIfChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Current', 'Projected'],
+      datasets: [{
+        label: 'Attendance %',
+        data: [s.percentage, newPct],
+        backgroundColor: [
+          pctColor(s.percentage).includes('success') ? '#3ecf8e' :
+          pctColor(s.percentage).includes('warning') ? '#f5a623' : '#f05c5c',
+          newPct >= 80 ? '#3ecf8e' : newPct >= 75 ? '#f5a623' : '#f05c5c',
+        ],
+        borderRadius: 8,
+        borderSkipped: false,
+        barPercentage: 0.5,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#13161d',
+          borderColor: '#2e3347',
+          borderWidth: 1,
+          titleColor: '#e4e6f0',
+          bodyColor: '#6b7191',
+          callbacks: { label: ctx => ` ${ctx.parsed.y}%` },
+        },
+      },
+      scales: {
+        x: {
+          ticks: { color: '#6b7191', font: { size: 12, weight: '600' } },
+          grid: { display: false },
+        },
+        y: {
+          min: 0,
+          max: 100,
+          ticks: { color: '#6b7191', font: { size: 11 }, callback: v => v + '%' },
+          grid: { color: '#1f2330' },
+        },
+      },
+    },
+    plugins: [{
+      id: 'thresholdLine',
+      afterDraw(chart) {
+        const yScale = chart.scales.y;
+        const y = yScale.getPixelForValue(75);
+        const ctx = chart.ctx;
+        ctx.save();
+        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = 'rgba(245,166,35,.5)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(chart.chartArea.left, y);
+        ctx.lineTo(chart.chartArea.right, y);
+        ctx.stroke();
+        ctx.restore();
+        ctx.font = '10px JetBrains Mono';
+        ctx.fillStyle = '#f5a623';
+        ctx.fillText('75%', chart.chartArea.right + 4, y + 4);
+      }
+    }],
+  });
+}
+</script>
+{% include 'partials/pwa_sw.html' %}
+</body>
+</html>

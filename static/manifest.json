@@ -1,0 +1,27 @@
+{
+  "name": "AttendWise — Attendance Analytics",
+  "short_name": "AttendWise",
+  "description": "Live attendance analytics for Chandigarh University students. Track, predict, and plan your attendance.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0d0f14",
+  "theme_color": "#0d0f14",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/static/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "en",
+  "dir": "ltr"
+}

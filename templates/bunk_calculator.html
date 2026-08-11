@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% include 'partials/pwa_head.html' %}
+  <title>AttendWise — Bunk Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0d0f14; --surface:#13161d; --surface2:#181c26;
+      --border:#1f2330; --border-hi:#2e3347;
+      --accent:#4f6ef7; --success:#3ecf8e; --warning:#f5a623; --danger:#f05c5c;
+      --text:#e4e6f0; --muted:#6b7191;
+      --mono:'JetBrains Mono',monospace; --sans:'Inter',sans-serif;
+    }
+    html,body { background:var(--bg); color:var(--text); font-family:var(--sans); font-size:14px; min-height:100vh; }
+
+    nav {
+      height:56px; background:var(--surface); border-bottom:1px solid var(--border);
+      display:flex; align-items:center; padding:0 28px; position:sticky; top:0; z-index:100; gap:32px;
+    }
+    .nav-brand { font-family:var(--mono); font-size:13px; font-weight:500; letter-spacing:.1em; color:var(--accent); text-decoration:none; text-transform:uppercase; }
+    .nav-links { display:flex; gap:4px; flex:1; }
+    .nav-link { padding:6px 14px; border-radius:6px; font-size:13px; font-weight:500; color:var(--muted); text-decoration:none; transition:color .15s,background .15s; }
+    .nav-link:hover { color:var(--text); background:var(--border); }
+    .nav-link.active { color:var(--accent); background:var(--border); }
+
+    .page { padding:28px; max-width:1100px; margin:0 auto; }
+    .page-header { margin-bottom:28px; }
+    .page-header h1 { font-size:20px; font-weight:700; letter-spacing:-.02em; }
+    .page-header p  { font-size:13px; color:var(--muted); margin-top:4px; }
+
+    /* ── Subject grid ── */
+    .subject-grid {
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(320px,1fr)); gap:14px;
+    }
+
+    .subject-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:12px;
+      padding:20px; transition:border-color .15s; cursor:pointer;
+    }
+    .subject-card:hover { border-color:var(--border-hi); }
+    .subject-card.selected { border-color:var(--accent); }
+
+    .sc-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+    .sc-name { font-size:13.5px; font-weight:600; line-height:1.3; }
+    .sc-code { font-family:var(--mono); font-size:11px; color:var(--accent); margin-top:3px; }
+
+    .sc-pct {
+      font-family:var(--mono); font-size:20px; font-weight:700; text-align:right; line-height:1;
+    }
+    .sc-pct-label { font-size:10px; color:var(--muted); text-align:right; margin-top:3px; }
+
+    /* Progress bar */
+    .sc-bar { height:4px; background:var(--border); border-radius:99px; overflow:hidden; margin-bottom:12px; }
+    .sc-bar-fill { height:100%; border-radius:99px; }
+
+    /* Budget row */
+    .sc-budget {
+      display:flex; justify-content:space-between; align-items:center;
+      padding-top:10px; border-top:1px solid var(--border);
+    }
+    .budget-label { font-size:11px; color:var(--muted); }
+    .budget-value { font-family:var(--mono); font-size:16px; font-weight:700; }
+
+    .priority-badge {
+      font-size:10.5px; font-weight:600; padding:3px 9px; border-radius:20px;
+    }
+    .priority-badge.bunkable      { background:rgba(62,207,142,.15); color:var(--success); }
+    .priority-badge.attend        { background:rgba(245,166,35,.15);  color:var(--warning); }
+    .priority-badge.must          { background:rgba(240,92,92,.15);   color:var(--danger); }
+    .priority-badge.not-started   { background:var(--border); color:var(--muted); }
+
+    /* ── Detail panel ── */
+    .detail-panel {
+      background:var(--surface); border:1px solid var(--border); border-radius:16px;
+      padding:28px; margin-bottom:24px; display:none;
+    }
+    .detail-panel.visible { display:block; }
+
+    .dp-header {
+      display:flex; justify-content:space-between; align-items:flex-start;
+      margin-bottom:24px; flex-wrap:wrap; gap:12px;
+    }
+    .dp-title { font-size:18px; font-weight:700; letter-spacing:-.01em; }
+    .dp-sub   { font-size:13px; color:var(--muted); margin-top:4px; }
+
+    .dp-stats {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px;
+    }
+    .dp-stat {
+      background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px;
+    }
+    .dp-stat-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+    .dp-stat-value { font-family:var(--mono); font-size:22px; font-weight:700; }
+
+    /* Bunk slider */
+    .slider-section { margin-bottom:20px; }
+    .slider-label {
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:13px; margin-bottom:10px;
+    }
+    .slider-label span { font-family:var(--mono); font-size:16px; font-weight:700; color:var(--accent); }
+
+    input[type=range] {
+      width:100%; accent-color:var(--accent); height:4px; cursor:pointer;
+    }
+
+    .slider-result {
+      margin-top:16px; padding:16px 20px; border-radius:10px;
+      border:1px solid var(--border); background:var(--bg);
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+    }
+
+    .result-pct { font-family:var(--mono); font-size:28px; font-weight:700; }
+    .result-label { font-size:13px; color:var(--muted); margin-top:2px; }
+    .result-status { font-size:13px; font-weight:600; padding:6px 16px; border-radius:8px; }
+
+    /* ── Summary strip ── */
+    .summary-strip {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px;
+    }
+    .strip-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px;
+    }
+    .strip-label { font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .strip-value { font-family:var(--mono); font-size:26px; font-weight:700; }
+
+    @media (max-width:640px) {
+      .dp-stats { grid-template-columns:1fr 1fr; }
+      .summary-strip { grid-template-columns:1fr 1fr; }
+      .page { padding:16px; }
+    }
+  </style>
+</head>
+<body>
+
+{% set page = 'bunk' %}
+{% include 'partials/nav.html' %}
+
+<div class="page">
+  <div class="page-header">
+    <h1>Safe Bunk Calculator</h1>
+    <p>How many classes can you safely skip per subject — and what happens if you do.</p>
+  </div>
+
+  <!-- Summary strip -->
+  <div class="summary-strip" id="summaryStrip">
+    <div class="strip-card"><div class="strip-label">Total Bunk Budget</div><div class="strip-value" id="totalBudget" style="color:var(--success)">—</div></div>
+    <div class="strip-card"><div class="strip-label">Bunkable Subjects</div><div class="strip-value" id="bunkableCount" style="color:var(--accent)">—</div></div>
+    <div class="strip-card"><div class="strip-label">Must Attend</div><div class="strip-value" id="mustCount" style="color:var(--danger)">—</div></div>
+  </div>
+
+  <!-- Detail panel (shown on card click) -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="dp-header">
+      <div>
+        <div class="dp-title" id="dpTitle">—</div>
+        <div class="dp-sub"  id="dpSub">—</div>
+      </div>
+      <button onclick="closeDetail()" style="background:var(--border);border:none;color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;">Close</button>
+    </div>
+
+    <div class="dp-stats">
+      <div class="dp-stat"><div class="dp-stat-label">Current %</div><div class="dp-stat-value" id="dpPct">—</div></div>
+      <div class="dp-stat"><div class="dp-stat-label">Bunk Budget</div><div class="dp-stat-value" id="dpBudget" style="color:var(--success)">—</div></div>
+      <div class="dp-stat"><div class="dp-stat-label">Attended</div><div class="dp-stat-value" id="dpAttended">—</div></div>
+      <div class="dp-stat"><div class="dp-stat-label">Conducted</div><div class="dp-stat-value" id="dpConducted">—</div></div>
+    </div>
+
+    <!-- Bunk slider -->
+    <div class="slider-section">
+      <div class="slider-label">
+        Classes to skip: <span id="sliderVal">0</span>
+      </div>
+      <input type="range" id="bunkSlider" min="0" max="20" value="0" oninput="updateSlider(this.value)" />
+      <div class="slider-result">
+        <div>
+          <div class="result-pct" id="resultPct">—%</div>
+          <div class="result-label" id="resultLabel">—</div>
+        </div>
+        <div class="result-status" id="resultStatus">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subject cards -->
+  <div class="subject-grid" id="subjectGrid">
+    <div style="color:var(--muted);padding:40px;grid-column:1/-1;text-align:center">Loading…</div>
+  </div>
+</div>
+
+<script>
+let subjects = [];
+let activeSubject = null;
+
+fetch('/api/bunk-calculator')
+  .then(r => r.json())
+  .then(data => {
+    subjects = data;
+
+    const totalBudget   = data.reduce((s, x) => s + Math.max(x.bunk_budget, 0), 0);
+    const bunkableCount = data.filter(x => x.priority === 'Bunkable').length;
+    const mustCount     = data.filter(x => x.priority === 'Must Attend').length;
+
+    document.getElementById('totalBudget').textContent   = totalBudget;
+    document.getElementById('bunkableCount').textContent = bunkableCount;
+    document.getElementById('mustCount').textContent     = mustCount;
+
+    renderCards(data);
+  })
+  .catch(() => {
+    document.getElementById('subjectGrid').innerHTML =
+      '<div style="color:var(--danger);padding:40px;grid-column:1/-1;text-align:center">Failed to load data.</div>';
+  });
+
+function pctColor(p) {
+  return p >= 80 ? 'var(--success)' : p >= 75 ? 'var(--warning)' : 'var(--danger)';
+}
+
+function priorityClass(p) {
+  if (p === 'Bunkable')         return 'bunkable';
+  if (p === 'Attend Carefully') return 'attend';
+  if (p === 'Must Attend')      return 'must';
+  return 'not-started';
+}
+
+function renderCards(data) {
+  document.getElementById('subjectGrid').innerHTML = data.map((s, i) => {
+    const color = pctColor(s.percentage);
+    const pCls  = priorityClass(s.priority);
+    return `
+      <div class="subject-card" id="card-${i}" onclick="openDetail(${i})">
+        <div class="sc-header">
+          <div>
+            <div class="sc-name">${s.subject}</div>
+            <div class="sc-code">${s.code}</div>
+          </div>
+          <div>
+            <div class="sc-pct" style="color:${color}">${s.percentage}%</div>
+            <div class="sc-pct-label">${s.attended}/${s.conducted}</div>
+          </div>
+        </div>
+        <div class="sc-bar"><div class="sc-bar-fill" style="width:${Math.min(s.percentage,100)}%;background:${color}"></div></div>
+        <div class="sc-budget">
+          <div>
+            <div class="budget-label">Bunk Budget</div>
+            <div class="budget-value" style="color:${s.bunk_budget > 0 ? 'var(--success)' : 'var(--danger)'}">
+              ${s.bunk_budget > 0 ? s.bunk_budget : 0} classes
+            </div>
+          </div>
+          <span class="priority-badge ${pCls}">${s.priority}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openDetail(i) {
+  activeSubject = subjects[i];
+  const s = activeSubject;
+
+  document.querySelectorAll('.subject-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('card-' + i).classList.add('selected');
+
+  document.getElementById('dpTitle').textContent    = s.subject;
+  document.getElementById('dpSub').textContent      = s.code + ' · ' + s.priority;
+  document.getElementById('dpPct').textContent      = s.percentage + '%';
+  document.getElementById('dpPct').style.color      = pctColor(s.percentage);
+  document.getElementById('dpBudget').textContent   = Math.max(s.bunk_budget, 0);
+  document.getElementById('dpAttended').textContent = s.attended;
+  document.getElementById('dpConducted').textContent= s.conducted;
+
+  const slider = document.getElementById('bunkSlider');
+  slider.max   = Math.max(s.bunk_budget + 10, 15);
+  slider.value = 0;
+  updateSlider(0);
+
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('visible');
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('visible');
+  document.querySelectorAll('.subject-card').forEach(c => c.classList.remove('selected'));
+  activeSubject = null;
+}
+
+function updateSlider(val) {
+  val = parseInt(val);
+  document.getElementById('sliderVal').textContent = val;
+
+  const s       = activeSubject;
+  const newA    = s.attended;
+  const newC    = s.conducted + val;
+  const newPct  = newC > 0 ? parseFloat(((newA / newC) * 100).toFixed(2)) : 0;
+  const base    = s.percentage;
+  const delta   = parseFloat((newPct - base).toFixed(2));
+  const isSafe  = newPct >= 75;
+
+  document.getElementById('resultPct').textContent   = newPct + '%';
+  document.getElementById('resultPct').style.color   = pctColor(newPct);
+  document.getElementById('resultLabel').textContent =
+    val === 0 ? 'Current attendance' :
+    `After skipping ${val} class${val > 1 ? 'es' : ''} · ${delta >= 0 ? '+' : ''}${delta}% change`;
+
+  const statusEl = document.getElementById('resultStatus');
+  if (val === 0) {
+    statusEl.textContent        = '—';
+    statusEl.style.background   = 'transparent';
+    statusEl.style.color        = 'var(--muted)';
+  } else if (isSafe && val <= s.bunk_budget) {
+    statusEl.textContent        = '✓ Safe to skip';
+    statusEl.style.background   = 'rgba(62,207,142,.15)';
+    statusEl.style.color        = 'var(--success)';
+  } else if (isSafe) {
+    statusEl.textContent        = '⚠ Borderline';
+    statusEl.style.background   = 'rgba(245,166,35,.15)';
+    statusEl.style.color        = 'var(--warning)';
+  } else {
+    statusEl.textContent        = '✗ Dangerous';
+    statusEl.style.background   = 'rgba(240,92,92,.15)';
+    statusEl.style.color        = 'var(--danger)';
+  }
+}
+</script>
+{% include 'partials/pwa_sw.html' %}
+</body>
+</html>

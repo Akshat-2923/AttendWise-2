@@ -1,0 +1,2555 @@
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head><meta charset="utf-8" /><meta name="theme-color" content="#ce3333" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="dns-prefetch" href="https://student.culko.in" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" /><link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;family=Poppins:wght@300;400;500;600&amp;family=Roboto:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet" /><title>
+	Chandigarh University Management System |  Unnao Campus
+</title><link rel="stylesheet" href="assets/css/bootstrap.min.css" /><link rel="stylesheet" href="assets/css/font-awesome.min.css" /><link rel="stylesheet" href="assets/css/style.css" /><link rel="stylesheet" href="assets/css/material-btn.css" /><link rel="stylesheet" href="assets/css/responsive.css" /><link rel="stylesheet" href="assets/css/style.css" /><link rel="stylesheet" href="assets/css/style-new.css" /><link rel="stylesheet" href="n-css/sidenav.css" /><link rel="stylesheet" href="n-css/scrollbar.css" /><link rel="stylesheet" href="css/toastr8.min.css" /><link rel="stylesheet" href="css/sweet-alert.css" /><link rel="stylesheet" href="Scripts/jquery-ui.css" /><link href="css/apprise.min.css" rel="stylesheet" /><link rel="stylesheet" href="Help/help-css.css" /><link rel="stylesheet" href="assets/css/live-video.css" />
+
+
+    <script src="Scripts/apprise-1.5.min.js"></script>
+    <script type="text/javascript" src="Scripts/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="Scripts/sweet-alert.min.js"></script>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!--- Analytics CUCHD --->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108822757-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-108822757-1');
+    </script>
+
+
+
+    <style>
+        body, html {
+            height: 100%;
+            width: 100%;
+        }
+
+        #div_exam img {
+            width: 100%;
+        }
+
+        #div_exam {
+            width: 146px;
+            position: absolute;
+            left: 0;
+            top: 10px;
+        }
+
+        .header-right {
+            position: relative;
+        }
+
+        #menu-loading {
+            /*position: absolute;
+            top: 9px;
+            left: 50%;*/
+            display: none;
+            width: 20px;
+            height: 20px;
+        }
+        .loading{ top: 16px; left: 50%; }
+        #short_links .col-sm-3 {
+            width: 20%;
+        }
+
+        .logo {
+            position: relative;
+        }
+        .logo i {
+            position: absolute;
+            top: 50%;
+            right: -30px;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 50%;
+            transform: translateY(-50%);
+            font-size: 36px;
+        }
+        #footer {
+            position: relative;
+        }
+        #a_bugreport {
+            /*position: absolute;
+            right: 13px;
+            bottom: 28px;*/
+            color: red;
+            font-size: 13px;
+        }
+        div[id*="divUniEmail"] {
+            position: absolute;
+            top: 102px;
+            background: #fff;
+            padding: 10px;
+            height: auto;
+            z-index: 99;
+            border-radius: 10px;
+            border: 1px solid #cecece;
+            z-index: 999999;
+            right: 10px;
+            transition: all 0.4s ease-in-out 0s;
+            -webkit-transition: all 0.4s ease-in-out 0s;
+            display: none;
+            width:calc(100% - 20px);
+        }
+        div[id*="div_OE"] {
+            /*position: relative;
+            z-index:999;*/
+        }
+        #short_links {
+            overflow: visible !important;
+        }
+        @media only screen and (max-width: 767px) {
+            #short_links .col-sm-3 {
+                width: 50%;
+            }
+            #short_links .col-sm-3:last-child {
+                padding-right: 7px;
+            }
+            div[id*="divUniEmail"]{
+                width:310px;
+            }
+        }
+        /* 22-08-2023 */
+        #divChangePassword input[type="submit"], 
+        #divChangePassword input[type="button"],
+        #divChangeWifiPassword input[type="submit"], 
+        #divChangeWifiPassword input[type="button"]{
+            padding: 0px !important;
+        }
+        input[type=submit], input[type=button] {
+            padding: 7px 15px !important;
+        }
+
+        /*header {
+            background: #fff;
+            box-shadow: none;
+            border-bottom: 1px solid #dadbdd;
+        }*/
+
+        .page-search {
+            padding: 13px 30px;
+    }
+        .header-left {
+            /*width: 260px;
+                border-right: 1px solid #dadbdd;
+            padding: 7px 0;*/
+        }
+
+        .user-profile-link h6 {
+            color: #405189;
+        }
+
+        .header-right {
+            padding: 0;
+        }
+        .user-profile-link > span {
+            height: 38px;
+            width: 38px;
+        }
+
+
+        .user-dropdown {
+            width: 190px;
+            background: #fff;
+            box-shadow: none;
+            top: 74px;
+            padding: 0;
+            box-shadow: 0 5px 10px rgba(30,32,37,.12);
+        }
+        .user-dropdown ul li a {
+            padding: 10px 10px;
+            font-size: 14px;
+        }
+        .user-dropdown ul li a:hover{
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        .user-profile-link small.uid{
+            display: block;
+            margin-top: 2px;
+        }
+
+        .setting-dropdown {
+            width: 210px;
+            background: #fff;
+            box-shadow: none;
+            top: 52px;
+            right: -11px;
+            padding: 0;
+            box-shadow: 0 5px 10px rgba(30,32,37,.12);
+        }
+
+        .setting-dropdown ul li{
+            margin: 0 !important;
+        }
+        .setting-dropdown ul li a {
+            padding: 10px 10px;
+            font-size: 14px;
+        }
+        .setting-dropdown ul li a:hover{
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        .info-icon{
+            width: auto;
+        }
+        .home-links ul li,
+        .all-notifications ul>li{
+            margin-left: 25px;
+        }
+
+
+        /*.main-wrapper {
+            background: #f3f3f9;
+            padding: 72px 0 0 260px;
+        }
+        .inner-wrapper {
+            padding: 30px 15px;
+        }*/
+        .page-search-input input[type="text"] {
+            height: 48px;
+            width: 100%;
+            border-radius: 30px;
+            background-color: rgba(228, 228, 228, 0.5);
+            padding: 0 25px;
+            color: #000;
+            transition: all 0.4s ease-in-out 0s;
+            -webkit-transition: all 0.4s ease-in-out 0s;
+            border: 1px solid #fff;
+        }
+
+        /*.uims-sidebar {
+            width: 260px;
+            background: #fff;
+            box-shadow: none;
+            padding-top: 75px;
+            border-right: 1px solid #dadbdd;
+        }*/
+        .uims-sidebar li {
+            border-bottom: 0;
+        }
+        .uims-sidebar li a {
+            color: #fff;
+            font-size: 14px;
+            line-height: 17px;
+            padding:15px;
+            position: relative;
+            font-weight: normal;
+            border-radius:30px;
+        }
+        .uims-sidebar li a span.arrow {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .uims-sidebar ul .sub-menu li{
+            background-color: transparent;
+            border-color: #f5f5f5;
+            border: 0;
+        }
+        .uims-sidebar ul .sub-menu li a{
+            position: relative;
+            color: #fff;
+        }
+        .uims-sidebar ul .sub-menu li a::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 2px;
+            background: #fff;
+        }
+        .uims-sidebar ul ul {
+            padding: 0;
+            /*border-bottom: 1px solid #fff;*/
+        }
+        .uims-sidebar ul ul li a {
+            display: block;
+            padding: 12px 16px 12px 35px;
+            line-height: 16px;
+            font-size: 14px;
+        }
+        .menu-content li[aria-expanded="true"] a {
+            background-color: #B80101;
+            color: #fff !important;
+        }
+        li[aria-expanded="true"] a .arrow::before {
+            transform: rotate(90deg);
+        }
+        .uims-sidebar li a:hover {
+            background-color:#B80101;
+        }
+        .uims-sidebar ul ul ul {
+            padding: 0;
+        }
+
+        .user-profile-link {
+            background: #f1f1f1;
+            padding: 18px 20px;
+        }
+
+        .shortLinks {
+            display: flex;
+            justify-content: space-between;
+            margin: 0 -10px;
+        }
+        /*.shortLinks__item:first-child{
+            padding-left: 0;
+        }
+        .shortLinks__item:last-child{
+            padding-right: 0;
+        }*/
+        .shortLinks__item {
+            width: 100%;
+            padding: 0 10px;
+        }
+        .shortLinks__item a {
+            width: 100%;
+            background: #fff;
+            padding: 20px;
+            position: relative;
+        }
+        .shortLinks__item a span {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            background: #e5f3fe;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .shortLinks__item a h6 {
+            font-size: 16px;
+            color: #354781;
+            font-weight: 600;
+        }
+        .shortLinks__item a small {
+            font-size: 12px;
+            border-bottom: 2px solid #ddd;
+            color: #333;
+            display: inline-block;
+            text-transform: uppercase;
+            margin-top: 15px;
+        }
+
+        #loader img{
+            border-radius: 50%;
+            width: 35px
+        }
+        footer {
+            /*padding: 20px 0;
+            background: #f3f3f9;
+            margin-top: 0;
+            border-top: 1px solid #ddd;*/
+        }
+
+        .uims-sidebar.swipe {
+            left: -275px;
+        }
+
+        .box-shadow-common {
+            box-shadow: rgba(100,98,92,.06) 0 0 15px 4px;
+            border: 0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        body {
+            background: #F7F7F5 !important;
+        }
+
+        /*table#rAttachments {
+            background: #f1f1f1 !important;
+        }*/
+        table#rAttachments td{
+            padding: 0!important;
+        }
+        #divChangePassword,
+        #divChangeWifiPassword{
+            background-color: rgba(30, 30, 30, 50%) !important;
+        }
+
+        #divChangePassword .modal-content,
+        #divChangeWifiPassword .modal-content {
+            border-radius: 10px;
+            box-shadow: rgba(100,98,92,.06) 0 0 15px 4px;
+        }
+
+        #divChangePassword input[type=text], 
+        #divChangePassword select, 
+        #divChangePassword input[type=password], 
+        #divChangePassword textarea,
+        #divChangeWifiPassword input[type=text], 
+        #divChangeWifiPassword select, 
+        #divChangeWifiPassword input[type=password], 
+        #divChangeWifiPassword textarea {
+            height: 43px;
+            border-radius: 6px;
+            padding: 0 14px;
+        }
+
+        #divChangePassword input[type=submit], 
+        #divChangePassword input[type=button],
+        #divChangeWifiPassword input[type=submit], 
+        #divChangeWifiPassword input[type=button] {
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            height: 43px;
+            border-radius: 6px;
+            font-weight: 600;
+            line-height: 43px;
+        }
+        #divChangePassword .modal-header,
+        #divChangeWifiPassword .modal-header {
+            background: #fff;
+            border: 0;
+            padding:10px;
+        }
+        #divChangePassword .modal-header h4,
+        #divChangeWifiPassword .modal-header h4 {
+            color: #333;
+            font-weight: 600;
+        }
+        #divChangePassword .modal-header .close,
+        #divChangeWifiPassword .modal-header .close {
+            color: #999;
+            right: 5px;
+            position: relative;
+            top: 4px;
+        }
+
+        #divChangePassword .modal-body,
+        #divChangeWifiPassword .modal-body {
+            padding: 10px 20px 15px;
+        }
+
+        #divChangePassword .modal-dialog,
+        #divChangeWifiPassword .modal-dialog {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+        .form_header {
+            background: #B80101;
+            padding: 12px;
+            border-bottom: 0;
+            text-align: center;
+            margin: 0;
+            line-height: 18px;
+            font-size: 18px;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        } 
+        table{
+            background: #fff !important;
+                border-color: #ddd;
+        }
+        table th {
+            padding: 0;
+            background-color: #eeeeee !important;
+            font-weight: 500 !important;
+            padding: 3px 10px !important;
+            font-size: 14px !important;
+        }
+        table th:hover{ background-color: #eeeeee !important; }
+        table td {
+            padding: 3px 10px;
+        }
+
+        .NavigationSearchPC {
+	        background: #fff;
+	        left: 0;
+	        right: 0;
+	        top: 0;
+            width:100%;
+	        padding-top: 52px;
+        }
+        .divUniEmail{ color:#232323; }
+        .modal { z-index:1060; }
+        .modal.fade .modal-dialog{ transition: transform .35s ease-out; }
+        .modal-backdrop.in{ opacity:.5; }
+        .modal.fade.in .modal-dialog{ transform: translate(0,0); }
+        .modal.fade.in { opacity: 1; }
+        .fade{ transition: opacity .35s linear; }
+        .nav-tabMessage li a{ padding:10px 15px; border-radius:5px 5px 0 0; }
+        .nav-tabMessage li{ display:flex; }
+        /*.modal.show .modal-dialog{ border:10px solid green; }*/
+        @media only screen and (min-width: 1920px){
+            .inner-wrapper{
+                max-width: 1920px;
+                margin: auto;
+            }
+        }
+        @media only screen and (max-width: 1365px){
+            .page-search {
+                width: 37%;
+            }
+            /*.main-wrapper {
+                padding-left: 0;
+            }*/
+            .uims-sidebar {
+                /*left: -265px;*/
+            }
+            .uims-sidebar.swipe {
+                left: 0;
+                z-index: 9999;
+            }
+            .modal-backdrop{
+                    background-color: rgb(30 30 30 / 37%) !important;
+            }
+        }
+        @media only screen and (max-width: 1199px){
+            .page-search {
+                padding: 13px 0;
+                width: 30%;
+            }
+            .home-links ul li, .all-notifications ul>li {
+                margin-left: 20px;
+            }
+            .shortLinks {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .shortLinks__item {
+                width: 33%;
+                padding: 0 10px;
+            }
+        }
+        @media only screen and (max-width: 991px){
+            .info-icon svg,
+            .home-links svg{
+                width: 16px;
+                height: 16px;
+            }
+            .home-links ul li, .all-notifications ul>li {
+                margin-left: 15px;
+            }
+            .home-links > ul > li > a{
+                font-size: 0
+            }
+            .page-search-input input[type="text"]{
+                padding-right: 40px
+            }
+            /*#txtUserSearch001_PC {
+                background-position: 92% center;
+            }*/
+            .user-profile-link {
+                background: transparent;
+            }
+            .page-search {
+                width: 36%;
+            }
+        }
+        @media only screen and (max-width: 767px){
+            .page-search {
+                position: absolute;
+                display: none;
+                width: 100% !important;
+                top: 45px;
+                background: #fff;
+                padding: 8px 13px;
+            }
+            .page-search.open{
+                display: block
+            } 
+            .all-notifications, .home-links {
+                position: relative;
+                top: 0;
+                right: 0;
+            }
+            .header-right{
+                width: auto;
+            }
+            header::before{
+                display: none !important;
+            }
+
+            .shortLinks__item {
+                width: 50%;
+                padding: 0 10px;
+            }
+            /*.row {
+                margin-right: -15px !important;
+                margin-left: -15px !important;
+            }*/
+            .all-notifications{
+                width: auto;
+            }
+
+            .mob-search {
+                display: inline-block !important;
+            }
+            .mob-search svg{
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        @media only screen and (max-width: 575px){
+            .user-n-mob {
+                display: block;
+            }
+            .user-profile-link h6{
+                display: none
+            }
+            .user-n-mob h5{
+                font-size: 14px;
+                font-weight: 500;
+                color: #405189;
+            }
+            .user-n-mob h5 small{
+                display: block;
+                margin-top: 2px;
+            }
+        }
+
+
+        @media only screen and (max-width: 479px){
+            .shortLinks__item a span {
+                position: relative;
+                margin-top: 15px;
+                display: block;
+                left: 0;
+                bottom: 0;
+            }
+            .shortLinks__item a span svg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+            }
+            .shortLinks__item{
+                margin-bottom: 20px;
+            }
+            .shortLinks__item a{
+                height: 100%;
+                margin-bottom: 0;
+            }
+
+            /*.header-left {
+                width: 116px;
+                text-align: right;
+            }*/
+            .logo {
+                width: 70px;
+            }
+            .user-profile-link {
+                padding: 7px 10px;
+                margin-left: 0;
+            }
+            .info-icon svg, .home-links svg {
+                width: 14px;
+                height: 14px;
+            }
+            .mob-search svg{
+                width: 14px;
+                height: 14px;
+            }
+            .home-links ul li, .all-notifications ul>li {
+                margin-left: 10px;
+            }
+            .home-links ul li:first-child, .all-notifications ul>li:first-child{
+                margin-left: 0 !important;
+            }
+            .user-profile-link > span {
+                margin: 0;
+            }
+            .all-notifications, .home-links {
+                margin-top: 5px;
+            }
+            .main-wrapper {
+                padding-top: 72px;
+            }
+            .inner-wrapper {
+                padding: 0 15px;
+            }
+            .all-notifications {
+                margin-right: 15px;
+            }
+            .user-dropdown{
+                top: 51px;
+            }
+            .setting-dropdown {
+                top: 34px;
+            }
+        }
+
+
+        /* 22-08-2023 */
+    </style>
+    
+    <script src="Scripts/jquery.cookies.js"></script>
+    <script src="../assets/js/slick.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/css/slick.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/slick-theme.css">
+    <script src="n-js/StudentFedbackSubject.js?ver=1.1"></script>
+    <script type="text/javascript" src="Scripts/StuHostalFeedbackSurvey.js"></script>
+
+    <style>
+        .bb-login {
+            margin-bottom: 2px;
+        }
+
+        .bb-MentorDetails {
+            margin-top: 12px;
+        }
+
+        .download-id-card a {
+            color: #fff;
+        }
+
+        .download-id-card {
+            background: rgb(229, 57, 53);
+            margin-bottom: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+            .download-id-card:hover {
+                background: rgb(198, 40, 40);
+            }
+
+        #divQuestion_ table td input {
+            margin-right: 5px;
+        }
+
+        #divQuestion_ table td {
+            margin: 5px 5px 5px 0;
+            display: inline-block;
+            padding: 5px 15px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        #divOE.modal-backdrop.fade.in {
+            opacity: .5;
+            z-index: 99 !important;
+        }
+
+        @media only screen and (max-width: 768px) {
+            /*.bb-login {
+                margin-bottom: 5px;
+            }*/
+
+            .padding-0 {
+                padding: 0;
+            }
+        }
+
+        /*@media screen and (min-width: 769px) and (max-width: 991px) {
+            .bb-login {
+                margin-bottom: 25px;
+            }
+        }
+
+        @media screen and (min-width: 992px) and (max-width: 1172px) {
+            .bb-login {
+                margin-bottom: 7px;
+            }
+        }
+
+        @media screen and (min-width: 1173px) and (max-width: 1365px) {
+            .bb-login {
+                margin-bottom: 22px;
+            }
+        }
+
+         @media screen and (min-width: 1366px) and (max-width: 1401px) {
+            .bb-login {
+                margin-bottom: 5px;
+            }
+        }*/
+
+        .emp-avtar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+            .emp-avtar img {
+                width: 100%;
+            }
+
+        .modal-custom {
+            z-index: 999999;
+            background: rgba(255, 255, 255, 0.9);
+        }
+      #divStudentHostelFedback    #ctl02_gvFeedback {
+            line-height: 30px;
+        }
+
+      #divStudentHostelFedback  div label {
+            display: inline;
+        }
+
+       #divStudentHostelFedback input[type="radio"] td:last-child {
+            border: 1px solid red;
+            display: block;
+        }
+		.btn{ background: red !important}
+    </style>
+</head>
+<body class="body-gradient">
+    <form method="post" action="./StudentHome.aspx" id="form1" enctype="multipart/form-data">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+
+<script src="/ScriptResource.axd?d=D9drwtSJ4hBA6O8UhT6CQh3Y8nY4nhn-sbcXorRHtj0cBE5I40ap3pm5ZhBLjISGJGHNCO3jE-8UUnTJUCdI9PFb-ROrRgR9gFoNavG67iuXd43wgajodstUMhLg1vnACp0EIr0g130ggVzyoWHnoxdI7KRfrcuvaLralQk01qk1&amp;t=ffffffffacea8b1a" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof(Sys) === 'undefined') throw new Error('ASP.NET Ajax client-side framework failed to load.');
+//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=V7lYofBNDiSYOgSlDiTISpWQzXwHkdwb_MyQo9JoDqXv1GErNGoxyxvNBawo0CpmimIDli_6RgRpuDdKbSQ7C8nsqLCX_bEw4eHA_psm0-9G62oXZC3EhjXGt49l_xn_oUPP_hQ2MtNdqhDi3389qgJr4l0F3NCMtJ751pfp9nU1&amp;t=ffffffff9b7d03cf" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=8HBMVpJM49mm80uR-ggjY9_O4NHujT-HsBEsHUjCcGslRgkZk7NZQJq1InktUR18D6otBlNrtHuIil5S3XKZBNLBoizi068Jdo28ymNIsnXZgqnmzzPGMZSD4J9Tyqzz3HniSQox53H456DZyV3FyQ2&amp;t=ffffffff9b7d03cf" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=vQR2N7McTtmzjONdj8pDQPdvnkuSyfYQAvJvDncncxIDqvSbUk7HwZWSmo6cHtvIwRVO-wHw4VjG_biYk0fJNAJel_Bu4t7YIEyS4U19SRYjIDC2iVKmpC6glilG3MgWvusRDgsvJ-Y69-ByrgfswbMplKgFDDZy65jmdJYy7AM1&amp;t=ffffffff9b7d03cf" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=8CjII1v0OLoMNKf5zGXmemIk3OzZlcpC2D0DaIe6EdALuOS1S4p0g2jtrkaaKB7KNyn9U1-OOXUlpQaQCwNGBoxjO1694M0VPAa9vUZ2wFLhl-__QFn8KUh1NnDDknG3QkLOk5jCXH45FT2L4dgUM8FGG5cbyofdu0oLRNERZm81&amp;t=ffffffff9b7d03cf" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=yoepU9WTnNLBrovfoMoPb7Koo3z_0NFPum7qDjpzw8cl7PKoNog8KvJ4diNqXzMRNAPpm2L7mIXnzizbAvX4QISmDHJ-19WNQFlOkTYmhOQSXyVtxRdkVyuN02T7YaAAUij1lETDwdLrwOURi-wWHM5C8Hbav2-aSp9a1pw6H9ipsRRGHW3W_zzG3eJWTuXRUMBRHpzSTgNReOINmv2lsA2&amp;t=ffffffff9b7d03cf" type="text/javascript"></script>
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="BDF28829" />
+        <input type="hidden" name="ctl00$hfInfoMessage" id="hfInfoMessage" />
+        <input type="hidden" name="ctl00$hfUserTheme" id="hfUserTheme" />
+        <input type="hidden" name="ctl00$hfWindowScroll" id="hfWindowScroll" />
+
+        <input type="hidden" name="ctl00$hfMessagePageNumber" id="hfMessagePageNumber" />
+        <input type="hidden" name="ctl00$hfIsNewMessage" id="hfIsNewMessage" />
+        <input type="hidden" name="ctl00$hfAlertPageNumber" id="hfAlertPageNumber" />
+        <input type="hidden" name="ctl00$hfIsNewAlert" id="hfIsNewAlert" />
+        <input type="hidden" name="ctl00$hfAlertsCount" id="hfAlertsCount" />
+        <input type="hidden" name="ctl00$hfMessagesCount" id="hfMessagesCount" />
+        <input type="hidden" name="ctl00$hfIsMobile" id="hfIsMobile" />
+
+         
+        <input type="hidden" name="ctl00$hfbytes" id="hfbytes" />
+        <input type="hidden" name="ctl00$hfname" id="hfname" />
+        
+        
+        <div id="loader-wrapper">
+            <div id="loader">
+                <img src="assets/uploads/loader.gif" alt="Loading" />
+                <p>Loading...</p>
+            </div>
+        </div>
+        <div class="main-wrapper" id="mainWrap">
+            <header id="header" class="position-fixed header d-flex">
+                
+                <div class="topbar d-flex position-absolute" id="myElement">
+                    <div class="header-left bg-transparent">
+                        <button class="navbar-toggler position-absolute collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uims_sidebar" aria-controls="uims_sidebar" aria-expanded="false" aria-label="Toggle navigation" onclick="slideLeft()">
+                            
+                            <img id="Image1" class="img-fluid" alt="logo" src="../assets/upload-images/icon-hamburger.svg" />
+                        </button>
+                        <a class="navbar-brand"><img class="img-fluid" src="../assets/upload-images/logo-main-black.png" width="100" /></a>
+                    </div>
+                    <div class="ms-auto d-flex outer-area">
+                        <div class="search-bar d-flex">
+                            <div class="search-form d-flex align-items-center">
+                                <span id="s-total-search" class="total-results position-absolute"></span>
+                                <input type="text" name="query" class="search-result" placeholder="Search here" autocomplete="off" id="txtUserSearch001_PC" />
+                                <img src="assets/uploads/loader.gif" class="loading position-absolute" id="menu-loading" />
+                                <div class="NavigationSearchPC position-absolute">
+                                </div>
+                            </div>
+                        </div>
+                        <nav class="header-nav ms-auto">
+                            
+                            <ul class="d-flex align-items-center">
+                                <li class="nav-item d-block d-lg-none" id="searchBox">
+                                    <a class="nav-link nav-icon d-flex justify-content-center align-items-center search-icon search-bar-toggle" href="#" >
+                                        <img src="../assets/upload-images/icon-search.svg" alt="Search" />
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link nav-icon d-flex nav-settings justify-content-center align-items-center" id="div_NotiCount" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="../assets/upload-images/icon-notifications.svg" alt="Notifications" />
+                                        <span class="other-notify badge badge-number badge-red align-items-center justify-content-center" id="spanNoti_Count">0</span>
+                                    </a>          
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" id="noti_content">
+                                        <li class="dropdown-header d-flex">
+                                            You have 0 new notifications
+                                            <a href="#"><span class="badge d-flex rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                                        </li>
+                                        
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li class="dropdown-footer">
+                                            <a href="#">Show all notifications</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a href="StudentHome.aspx" id="aHome" class="nav-link nav-icon d-flex align-items-center justify-content-center" data-bs-toggle="dropdown">
+                                        <img src="../assets/upload-images/icon-messages.svg" alt="Messages" />
+                                        <span class="badge badge-number d-flex align-items-center justify-content-center">0</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                                        <li class="dropdown-header">
+                                            You have 0 new messages
+                                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>                                        
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li class="dropdown-footer">
+                                            <a href="#">Show all messages</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link nav-icon nav-library d-flex align-items-center justify-content-center" href="#" id="div_LibCount">
+                                        <img src="../assets/upload-images/icon-books.svg" alt="Messages" />
+                                        <span class="badge badge-number badge-light d-flex align-items-center justify-content-center" id="spanLib_Count">0</span>
+                                    </a>
+                                    
+                                </li>
+                                
+                                <li class="nav-item dropdown pe-3 userInfo">
+                                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="d-none d-md-block dropdown-toggle position-relative ps-2">
+                                            <div class="u-name d-flex">
+                                                <span>Hello,</span>Akshat
+                                            </div>
+                                            <small class="uid">25LBCS3274</small>
+                                        </div>
+                                        <img src="data:image;base64,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" id="imgFullProfilePic" alt="Profile" class="rounded-circle" />
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                                        <li class="dropdown-header d-flex flex-column">
+                                            <h6>Akshat Dwivedi</h6>
+                                        </li>
+                                        <li class="user-n-mob">
+                                            <h5></h5>
+                                        </li>
+                                        
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li id="liProfile">
+                                            <a class="dropdown-item d-flex align-items-center" href="frmStudentProfile.aspx">
+                                                <i class="bi bi-person"></i>
+                                                <span>My Profile</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li>
+                                            <a id="LinkButton2" class="dropdown-item d-flex align-items-center" href="javascript:__doPostBack(&#39;ctl00$LinkButton2&#39;,&#39;&#39;)">
+                                                <i class="bi bi-gear"></i>
+                                                <span>Account Settings</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li>
+                                            <a id="LinkButton3" class="dropdown-item d-flex align-items-center" href="javascript:__doPostBack(&#39;ctl00$LinkButton3&#39;,&#39;&#39;)" style="text-decoration: none;">
+                                                <i class="bi bi-lock"></i>
+                                                <span>Change Password</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li id="liWifiPassword" class="message-item d-flex">
+                                            <a id="lbtnChangeWifiPassword" class="dropdown-item d-flex align-items-center" href="javascript:__doPostBack(&#39;ctl00$lbtnChangeWifiPassword&#39;,&#39;&#39;)" style="text-decoration: none;">
+                                                <i class="bi bi-wifi"></i>
+                                                <span>Change Internet Password</span>
+                                            </a>
+                                        </li>
+							            
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" onclick="Logout()">
+                                                <i class="bi bi-box-arrow-right"></i>
+                                                <span>Sign Out</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <div id="uims_sidebar" class="uims-sidebar d-lg-block sidebar leftSidebar leftSidebar-collapse position-fixed collapse">
+	            <div class="mobile-header align-items-center d-flex d-lg-none justify-content-between">
+		            <a class="navbar-brand"><img class="img-fluid" src="/assets/upload-images/logo-main.png" width="165" /></a>
+		            <button class="navbar-toggler d-lg-none navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uims_sidebar" aria-controls="uims_sidebar" aria-expanded="false" aria-label="Toggle navigation" onclick="slideLeft()">
+			            <span class="navbar-toggler-icon"><img src="/assets/upload-images/icon-close.svg" /></span>
+		            </button>
+	            </div>
+                <div class="header-left">
+                    <button class="navbar-toggler position-absolute d-none d-lg-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uims_sidebar" aria-controls="uims_sidebar" aria-expanded="false" aria-label="Toggle navigation" onclick="slideLeft()">
+                        
+                        <img id="img_logo" class="img-fluid" alt="logo" src="assets\uploads\login-logo-main.png" />
+                    </button>
+                    <button class="navbar-toggler position-absolute d-none d-sm-none d-lg-block collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uims_sidebar" aria-controls="uims_sidebar" aria-expanded="false" aria-label="Toggle navigation" onclick="slideLeft()">
+                        <span class="navbar-toggler-icon"><img src="../assets/upload-images/icon-hamburger-white.svg" class="img-fluid" /></span>
+                    </button>
+                    <a class="navbar-brand d-none d-lg-block" href="StudentHome.aspx"><img class="img-fluid" src="../assets/upload-images/logo-main.png" width="165" /></a>
+                </div>
+	            <div class="scroll-bar">
+		            <ul id="menu-content" class="nav flex-column menu-content collapse out" id="menu-content">
+			            
+					            <li data-toggle="collapse" data-target='#3563' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            Academics<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='3563' class='sub-menu collapse'><li><a class='a-uims-nav' href='javascript:void(0);'>Department of Life Long(DLL)</a></li><li><a class='a-uims-nav' href='frmStudentCourseWiseAttendanceSummary.aspx?type=etgkYfqBdH1fSfc255iYGw=='>My Attendance</a></li><li><a class='a-uims-nav' href='frmStudentWinningCampAttendanceSummary.aspx?type=etgkYfqBdH1fSfc255iYGw=='>My Attendance ACP/Winning Camp</a></li><li><a class='a-uims-nav' href='frmMyCourse.aspx'>My Courses and Lecture Plan</a></li><li><a class='a-uims-nav' href='frmMyTimeTable.aspx'>My Time Table</a></li><li><a class='a-uims-nav' href='frmWinningCampMyTimetable.aspx'>My Time Table ACP/Winning Camp</a></li><li><a class='a-uims-nav' href='javascript:void(0);'>Project</a></li><li><a class='a-uims-nav' href='frmResourceLibrary.aspx'>Resource Library</a></li><li data-toggle='collapse' data-target='#4138' class='collapsed'><a class='a-uims-nav' href='javascript:void(0);'>Social Internship<span class='arrow'></span></a></li><ul id='4138' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmStudentDailyDiary.aspx '>Daily Diary</a></li><li><a class='a-uims-nav' href='frmStudentSocialInternshipEntry.aspx'>Model Selection & Activity Upload</a></li><li><a class='a-uims-nav' href='frmStudentSocialInternshipEntryPart2.aspx'>Model Selection Part 2 & Activity Upload</a></li></ul></ul>
+				            
+					            <li data-toggle="collapse" data-target='#2403' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            Accounts<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='2403' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmAccountsStudentReceiptList.aspx'>Accounts Reciept</a></li><li><a class='a-uims-nav' href='frmAccountStudentDetails.aspx'>Accounts Statement/ Fee Payment</a></li></ul>
+				            
+					            <li data-toggle="collapse" data-target='#3566' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            Administration<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='3566' class='sub-menu collapse'><li data-toggle='collapse' data-target='#4214' class='collapsed'><a class='a-uims-nav' href='javascript:void(0);'>Centre for Global Education (CGE)<span class='arrow'></span></a></li><ul id='4214' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmCentreForGlobalEducationCGE_ISTP.aspx'>International Short-Term Program (ISTP)</a></li><li><a class='a-uims-nav' href='frmCentreForGlobalEducationCGE_ITP.aspx'>International Transfer Program (ITP)</a></li><li><a class='a-uims-nav' href='frmCentreForGlobalEducationCGE_SEP.aspx'>Semester Exchange Program (SEP)</a></li><li><a class='a-uims-nav' href='frmCentreForGlobalEducationCGE_USA.aspx'>USA</a></li></ul><li><a class='a-uims-nav' href='frmStudentComplaintAgainstHarassment.aspx'>Complaint Against Harassment</a></li><li><a class='a-uims-nav' href='frmStudentAdmissionDocumentsUpload.aspx'>Document Upload</a></li><li><a class='a-uims-nav' href='frmInternationalStudentBasicInformation.aspx'>International Student Application Form </a></li><li><a class='a-uims-nav' href='frmICTSServices.aspx'>ITP (International Transfer Program) Services</a></li><li><a class='a-uims-nav' href='frmInternationalProgramEnrolment.aspx'>OIR Enrollment Form</a></li><li><a class='a-uims-nav' href='frmOIRServices.aspx'>OIR Services</a></li><li><a class='a-uims-nav' href='frmUploadInternationalStudentMedicalInsurance.aspx'>University Medical Insurance</a></li></ul>
+				            
+					            <li data-toggle="collapse" data-target='#2850' class="collapsed">
+						            <a href='frmLoanLetterApplication.aspx' class="a-uims-nav">
+							            Apply for Loan Documents<span class="arrow"></span></a>
+						            
+					            </li>
+					            
+				            
+					            <li data-toggle="collapse" data-target='#3880' class="collapsed">
+						            <a href='frmAppCounsellingTherapyClinicRegistration.aspx' class="a-uims-nav">
+							            Counseling Therapy Clinic Registration<span class="arrow"></span></a>
+						            
+					            </li>
+					            
+				            
+					            <li data-toggle="collapse" data-target='#3713' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            DCPD<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='3713' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmCareerOptionOther.aspx?Type=QGVcrLuOjfitECW4+veVzA=='>Career Options by DCPD</a></li><li data-toggle='collapse' data-target='#3714' class='collapsed'><a class='a-uims-nav' href='javascript:void(0);'>Evening CUCAT<span class='arrow'></span></a></li><ul id='3714' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmMockTestNew.aspx'>Mock Test</a></li><li><a class='a-uims-nav' href='frmStuQuestionSolution.aspx'>View Question Solution</a></li></ul></ul>
+				            
+					            <li data-toggle="collapse" data-target='#4193' class="collapsed">
+						            <a href='frmDLLMOOCCoordinatorList.aspx' class="a-uims-nav">
+							            DLL MOOC Coordinator List<span class="arrow"></span></a>
+						            
+					            </li>
+					            
+				            
+					            <li data-toggle="collapse" data-target='#2342' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            E Library<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='2342' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmOpenAuthentication.aspx?id=PA8f2gBZPN2G5vACgUpS8q8aPNbtEWoFpGvx9fSSTn5SBSUkvaW1F4+WDbeuEVgrByLqYAw71dFjOnpINJQkb1nS/VwF0vUGdaNa/ZxXLbPWzD1EDuitwgCqnL4LzayY'>EBSCO eBook Academic Collection</a></li><li><a class='a-uims-nav' href='frmOpenAuthentication.aspx?id=PA8f2gBZPN2G5vACgUpS8q8aPNbtEWoFpGvx9fSSTn5SBSUkvaW1F4+WDbeuEVgrByLqYAw71dFjOnpINJQkb1nS/VwF0vUGdaNa/ZxXLbMj6WG9aUk6g/X7ApvmbBzR'>EBSCO Management Collection</a></li><li><a class='a-uims-nav' href='frmOpenAuthentication.aspx?id=PA8f2gBZPN2G5vACgUpS8q8aPNbtEWoFpGvx9fSSTn5SBSUkvaW1F4+WDbeuEVgrByLqYAw71dFjOnpINJQkb1nS/VwF0vUGdaNa/ZxXLbMa+4YBf7yAR+H/jNSXzgUV'>EBSCOhost  E-Journal Access(Art and Architecture)</a></li><li><a class='a-uims-nav' href='frmOpenAuthentication.aspx?id=QV5dHL7jXjFoMfhJzyRSB8mHytDcqoV5f4Wom3J0nlRXzfF6WI0M1CH0kkL/8BpGYTEyZlvrVdogWC2fw3Akc8lFubnuUo4BnEATg248VJXkQapuALK1TryDjmoT7t3eOXYb07XbuxPD2oE+obUlNg=='>IEEE</a></li><li><a class='a-uims-nav' href='frmOpenAuthentication.aspx?id=QV5dHL7jXjFoMfhJzyRSB8mHytDcqoV5f4Wom3J0nlRXzfF6WI0M1CH0kkL/8BpGQpb7uMfdWl8yF4aRUmP6Zsn6AQJaRnEB7/gtSzVR1p585pFZUqCcLP0Md1FrzDxE'>J-Gate (Science & Technology)</a></li><li><a class='a-uims-nav' href='frmOpenAuthentication.aspx?id=QV5dHL7jXjFoMfhJzyRSB8mHytDcqoV5f4Wom3J0nlRXzfF6WI0M1CH0kkL/8BpGQpb7uMfdWl8yF4aRUmP6Zsn6AQJaRnEB7/gtSzVR1p585pFZUqCcLP0Md1FrzDxE'>J-Gate (Soc. Science and Humanities)</a></li><li><a class='a-uims-nav' href='frmOpenAuthentication.aspx?id=PA8f2gBZPN2G5vACgUpS8q8aPNbtEWoFpGvx9fSSTn5rGd65jzE8cRuauaYj2tJnH0PJZ8oauJ+rb9nxzuaAexyENYqhaXlaXq/+C2p07L/8z27ruNOLpK4peo2XgI8A'>Publication Finder and Open Athens</a></li><li><a class='a-uims-nav' href='frmOpenAuthentication.aspx?id=nfiADxpckRxbzXbfgdwrIInRiQfwBTLb6/+Drz4Hfuu1f/+GiF1v7htWc6qZ4UfeZ8rCtYt+mAXwUTxgui+nIVYMH/X2+Mz5T0N9xRCq1O7h9QK5KPVsxhQgLnm25vNLWngZ7jKKbHleD9V5LzqaNEdPHmQrgYDKSejwnT8cE+y+fkzv+sKNmr1tKO6Ax8X20DEzMdIuHk6qSwoUsEES/mvO9tbVtnt1MFx0J9xqrshfF359RI86VFsSRY6J30wDg9WSMpPa4j3V28dJRMP5MvBH+hj+t0X5vazU4wBNAqs='>Web of Science</a></li></ul>
+				            
+					            <li data-toggle="collapse" data-target='#3565' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            Examination<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='3565' class='sub-menu collapse'><li><a class='a-uims-nav' href='FrmStudentFormsDetails.aspx'>Examaination Form Details</a></li><li><a class='a-uims-nav' href='frmStudentDatesheet.aspx'>My Date Sheet</a></li><li data-toggle='collapse' data-target='#4168' class='collapsed'><a class='a-uims-nav' href='javascript:void(0);'>Raise Query<span class='arrow'></span></a></li><ul id='4168' class='sub-menu collapse'><li><a class='a-uims-nav' href='StudentQueryMaster.aspx'>Student Query Master</a></li></ul><li data-toggle='collapse' data-target='#2190' class='collapsed'><a class='a-uims-nav' href='javascript:void(0);'>Result<span class='arrow'></span></a></li><ul id='2190' class='sub-menu collapse'><li><a class='a-uims-nav' href='result.aspx'>Result ( Regular )</a></li></ul><li><a class='a-uims-nav' href='frmAMCATStudentResult.aspx?type=6kjkaB6U01jsNZdSPYT2YA=='>Student AMCAT Result</a></li><li data-toggle='collapse' data-target='#2600' class='collapsed'><a class='a-uims-nav' href='javascript:void(0);'>Student Marks View<span class='arrow'></span></a></li><ul id='2600' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmStudentReappearMarksView.aspx'>Student Marks View Reappear</a></li><li><a class='a-uims-nav' href='frmStudentMarksView.aspx'>Student Marks View Regular</a></li></ul><li><a class='a-uims-nav' href='frmStudentPracticleDateSheet.aspx'>Student Practical Date Sheet</a></li><li><a class='a-uims-nav' href='frmAMCATStudentResult.aspx?type=S4w6En2dn/RLwsoo51Osyw=='>Student Technical Result</a></li></ul>
+				            
+					            <li data-toggle="collapse" data-target='#4157' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            Hostel<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='4157' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmStudenHostelDetails.aspx'>Details</a></li></ul>
+				            
+					            <li data-toggle="collapse" data-target='#3567' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            Library<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='3567' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmLibraryRepository.aspx'>CU E-Repository </a></li></ul>
+				            
+					            <li data-toggle="collapse" data-target='#2185' class="collapsed">
+						            <a href='frmStudentProfile.aspx' class="a-uims-nav">
+							            My Profile<span class="arrow"></span></a>
+						            
+					            </li>
+					            
+				            
+					            <li data-toggle="collapse" data-target='#2199' class="collapsed">
+						            <a href='frmTakeTest.aspx' class="a-uims-nav">
+							            Online Test<span class="arrow"></span></a>
+						            
+					            </li>
+					            
+				            
+					            <li data-toggle="collapse" data-target='#4199' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            PhD<span class="arrow"></span></a>
+						            
+					            </li>
+					            
+				            
+					            <li data-toggle="collapse" data-target='#2932' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            Student Leave Application<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='2932' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmStudentApplyDutyLeave.aspx'>Duty Leave</a></li><li><a class='a-uims-nav' href='frmStudentMedicalLeaveApply.aspx'>Medical Leave</a></li></ul>
+				            
+					            <li data-toggle="collapse" data-target='#2192' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            Student Relation Management System<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='2192' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmStudentEventReview.aspx'>Event Review</a></li><li><a class='a-uims-nav' href='frmSWCRequest.aspx'>Online Student Care Center Requests</a></li><li><a class='a-uims-nav' href='frmTalentSearchProgram.aspx'>Talent Search Program</a></li></ul>
+				            
+					            <li data-toggle="collapse" data-target='#4194' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            TPP UILAH<span class="arrow"></span></a>
+						            
+					            </li>
+					            
+				            
+					            <li data-toggle="collapse" data-target='#4159' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            Transport<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='4159' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmTransportDetails.aspx'>Details</a></li><li><a class='a-uims-nav' href='frmStudentTransportConsent.aspx'>Transport Consent</a></li><li><a class='a-uims-nav' href='frmStudentTransportConsent.aspx'>Transport Consent</a></li></ul>
+				            
+					            <li data-toggle="collapse" data-target='#4172' class="collapsed">
+						            <a href='javascript:void(0);' class="a-uims-nav">
+							            UCMC<span class="arrow"></span></a>
+						            
+					            </li>
+					            <ul id='4172' class='sub-menu collapse'><li data-toggle='collapse' data-target='#4178' class='collapsed'><a class='a-uims-nav' href='javascript:void(0);'>Competitive Exams Career Options<span class='arrow'></span></a></li><ul id='4178' class='sub-menu collapse'><li><a class='a-uims-nav' href='frmresources.aspx?type=3MjtO9wiGLhI6em0bw+XikP5Cb/RMH/7S57lk08Obqs='>Judicial Services Preparation</a></li></ul></ul>
+				            
+					            <li data-toggle="collapse" data-target='#4210' class="collapsed">
+						            <a href='frmStuUniformCollection.aspx' class="a-uims-nav">
+							            Uniform Management<span class="arrow"></span></a>
+						            
+					            </li>
+					            
+				            
+		            </ul>
+	            </div>
+            </div>
+            <div class="body-overlay"></div>
+            <div class="inner-wrapper">
+                <div id="short_links" class="d-flex content-boxes row g-3">
+                    <div class="col-sm-6 col-xl-3 col-6">
+                        <a href="frmImportantlink.aspx" id="div_top_1" class="bg-red d-flex card-info">
+                            <div class="card-icon rounded-circle red-box d-flex align-items-center justify-content-center">
+                                <img src="/assets/upload-images/icon-links.svg" alt="Important Links" class="img-fluid" />
+                            </div>
+                            <div class="d-flex flex-column cardBox justify-content-center">
+                                <h4>Important Links</h4>
+                                <span class="moreLink d-flex text-uppercase">Click Here</span>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="col-sm-6 col-xl-3 col-6">
+                        <a href="https://www.culko.in/online-request/" id="div_top_3" class="card-info bg-blue d-flex">
+                            <div class="card-icon rounded-circle blue-box d-flex align-items-center justify-content-center">
+                                <img src="/assets/upload-images/icon-facilitation.svg" alt="Facilitation" class="img-fluid" id="Layer_1" />
+                            </div>
+                            <div class="d-flex flex-column cardBox justify-content-center">
+                                <h4>Student Facilitation</h4>
+                                <span class="moreLink d-flex text-uppercase">Click to View</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-xl-3 col-6">
+                        <div id="div_top_5" class="d-flex">
+
+                            
+                            <a id="lbtnLMSSSO" class="d-flex card-info bg-yellow" href="javascript:__doPostBack(&#39;ctl00$lbtnLMSSSO&#39;,&#39;&#39;)">
+                                <div class="card-icon rounded-circle yellow-box d-flex align-items-center justify-content-center">
+                                    <img src="/assets/upload-images/icon-study.svg" alt="CU-LMS" class="img-fluid" />
+                                </div>
+                                <div class="d-flex flex-column cardBox justify-content-center">
+                                    <h4>CU-LMS</h4>
+                                    <span class="moreLink d-flex text-uppercase d-flex">My LMS</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6 col-xl-3 col-6 d-none">
+                        <a href="frmSWCRequest.aspx" id="div_top_4" class="d-flex card-info bg-yellow">
+                            <div class="card-icon rounded-circle yellow-box d-flex align-items-center justify-content-center">
+                                <img src="/assets/upload-images/icon-antiragging.svg" alt="Anti Ragging" class="img-fluid" />
+                            </div>
+                            <div class="d-flex flex-column cardBox justify-content-center">
+                                <h4>Student Center</h4>
+                                <span class="moreLink d-flex text-uppercase d-flex">Get Help</span>
+                            </div>
+                        </a>
+                    </div>
+                   <div class="col-sm-6 col-xl-3 col-6 position-relative">
+                        <div id="div_OE" class="card-info emp-info d-flex card-thumb">
+                            <div class="card-icon rounded-circle email-box d-flex align-items-center justify-content-center">
+                                <img src="/assets/upload-images/icon-email-lg.svg" alt="Anti Ragging" class="img-fluid" width="40" />
+                            </div>
+                            <div class="d-flex flex-column cardBox justify-content-center">
+                                <h4>My University Email</h4>
+                                <span class="moreLink d-flex text-uppercase d-flex">View Details</span>
+                            </div>
+                        </div>
+                        <div id="divUniEmail" class="divUniEmail" style="display: none;">Dear Akshat Dwivedi, <br/><span style="display:block; margin-top:5px">Your EmailId: <b>25LBCS3274@culkomail.in</span></b> <span style="display:block; margin-top:10px">Password: <b>S(671743700449aw</b></span> <span style="display:block; margin-top:10px">(One Time Password)</span><br/> To activate click <a style="display:block; padding:0" href="https://culkomail.in" target="_blank">https://culkomail.in</a>
+		   <p style="font-size:10px; font-style:italic;margin-top:5px">Note: This is one-time password for your outlook ID. You need to use your changed password every time you have to log in to your account</p></div>
+                    </div>
+                </div>
+                
+                    
+                    
+                    
+                    
+    <script type="text/javascript">
+
+        function stopPrntScr() {
+
+            var inpFld = document.createElement("input");
+            inpFld.setAttribute("value", "Access Restricted");
+            inpFld.setAttribute("width", "0");
+            inpFld.style.height = "0px";
+            inpFld.style.width = "0px";
+            inpFld.style.border = "0px";
+            document.body.appendChild(inpFld);
+            inpFld.select();
+            document.execCommand("copy");
+            inpFld.remove(inpFld);
+        }
+        function AccessClipboardData() {
+            try {
+                window.clipboardData.setData('text', "Access Restricted");
+            } catch (err) {
+            }
+        }
+
+
+        $(document).ready(function () {
+
+
+            $(document).keydown(function (e) {
+                e = (e || window.event);
+                if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                    e.preventDefault();
+                }
+                if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                    e.preventDefault();
+                }
+
+                if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                    e.preventDefault();
+                }
+
+                if (e.ctrlKey && e.keyCode == 'C'.charCodeAt(0)) {
+                    e.preventDefault();
+                }
+
+                if (e.ctrlKey && e.keyCode == 'A'.charCodeAt(0)) {
+                    e.preventDefault();
+                }
+
+                if (e.keyCode == 17 || e.keyCode == 27 || e.keyCode == 16 || e.keyCode == 18 || e.keyCode == 123 || e.keyCode == 122) {
+                    return false;
+                }
+
+                setInterval("AccessClipboardData()", 300);
+                //  return false;
+            });
+
+            //$(document).keypress(function (e) {
+            //    return false;
+            //});
+
+            $(document).keyup(function (e) {
+                var keyCode = e.keyCode ? e.keyCode : e.which;
+                if (keyCode == 44) {
+                    stopPrntScr();
+                }
+            });
+            $(function () {
+                $(this).bind("contextmenu", function (e) {
+                    e.preventDefault();
+                });
+            });
+            SearchStudentMentorDetails();
+        });
+
+        function SearchStudentMentorDetails() {
+            $('#loading-usersearch-pc').show();
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                url: "StudentHome.aspx/StudentMentorDetails",
+                data: "{}",
+                success: function (msg) {
+                    $('#divStudentMentorDetails').html(msg.d)
+                    $('#loading-usersearch-pc').hide();
+                }
+                ,
+                error: function (xhr, ajaxOptions, thrownError) {
+                    // window.location = "Login.aspx";
+                    $('#loading-usersearch-pc').hide();
+                }
+            });
+        }
+    </script>
+    <div class="d-flex align-items-start contentBlock md-mobile">
+        <ul class="nav flex-column leftNav nav-pills d-none d-lg-flex" id="myTab" role="tablist" aria-orientation="vertical">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages-tab-pane" type="button" role="tab" aria-controls="messages-tab-pane" aria-selected="false">Messages</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">My Course & Attendance</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="question-tab" data-bs-toggle="tab" data-bs-target="#question-tab-pane" type="button" role="tab" aria-controls="question-tab-pane" aria-selected="false">My Questions / Queries</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Mentor Details</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Virtual Card Download</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="job-tab" data-bs-toggle="tab" data-bs-target="#job-tab-pane" type="button" role="tab" aria-controls="job-tab-pane" aria-selected="false">Job Alert</button>
+            </li>
+        </ul>
+        <div class="tab-content accordion custom-accordion" id="myTabContent">
+            <div class="tab-pane fade show active accordion-item" id="messages-tab-pane" role="tabpanel" aria-labelledby="messages-tab" tabindex="0">
+                <h2 class="accordion-header d-lg-none" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        Messages
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse list-accordion collapse d-lg-block" aria-labelledby="headingFive" data-bs-parent="#myTabContent">
+                    <div class="accordion-body">
+                        <h3 class="portlet-caption heading mb-3"><i class="fa fa-envelope" aria-hidden="true"></i>Important Message</h3>
+                        <div class="imp-msg-block" id="divStudentMyMessages">
+                        </div>
+                        <div id="MessagesLoading" align="center" class="position-relative">
+                            <div id="loader">
+                                <img src="assets/uploads/loader.gif">
+                                <p>Loading Messages...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade accordion-item" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <h2 class="accordion-header d-lg-none" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        My Course & Attendance
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse list-accordion collapse d-lg-block" aria-labelledby="headingTwo" data-bs-parent="#myTabContent">
+                    <div class="accordion-body">
+                        <h3 class="heading mb-3"><i class="fa fa-bar-chart" aria-hidden="true"></i>My Course & Attendance</h3>
+                        <div class="portlet-body">
+                            <div id="divstudent-attendance">
+                                <div id="div_academicdetails" class="scroll-bar">
+                                </div>
+                            </div>
+                            <div class="div_stud_attendance_loading">
+                                <div class="div_loader">
+                                    <img src="assets/uploads/loader.gif">
+                                    <p>Loading Subjects...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade accordion-item" id="question-tab-pane" role="tabpanel" aria-labelledby="question-tab" tabindex="0">
+                <h2 class="accordion-header d-lg-none" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        My Questions / Queries
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse list-accordion collapse d-lg-block" aria-labelledby="headingFour" data-bs-parent="#myTabContent">
+                    <div class="accordion-body">
+                        <div id="ContentPlaceHolder1_UpdatePanel1" class="my-queries">
+	
+                                
+<script src="Scripts/jquery-ui.js"></script>
+    <link href="Scripts/jquery-ui.css" rel="stylesheet" />
+    <script src="Scripts/AutoCompleteText.js"></script>
+    <script src="n-js/responsive-table.js"></script>
+    <link href="n-css/responsive-table.css" rel="stylesheet" />
+<div class="portlet">
+    <h3 class="heading mb-3"><i class="fa fa-question-circle" aria-hidden="true"></i>My Question Or Queries</h3>
+    <div class="portlet-body">
+        <div class="query-block">
+            <div class="table-scroll">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Total</th>
+                            <th>Closed</th>
+                            <th>Open</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a id="ContentPlaceHolder1_wucSWCStudentRequestBox2_hlTotal" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$wucSWCStudentRequestBox2$hlTotal&#39;,&#39;&#39;)"></a></td>
+                            <td>
+                                <a id="ContentPlaceHolder1_wucSWCStudentRequestBox2_hlClose" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$wucSWCStudentRequestBox2$hlClose&#39;,&#39;&#39;)"></a></td>
+                            <td>
+                                <a id="ContentPlaceHolder1_wucSWCStudentRequestBox2_hlOpen" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$wucSWCStudentRequestBox2$hlOpen&#39;,&#39;&#39;)"></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+                                <div id="divCrm_Details" class="modal fade modal-custom" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" onclick="OpenNewPopUp('0','divCrm_Details');">&times;</button>
+                                                <h4 class="modal-title text-center heading">My Question Or Queries test</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                
+
+
+<style type="text/css">
+    .DisplayDesc {
+        width: 290px;
+        height: 50px;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+    .DisplayDiv {
+        width: 290px;
+        OVERFLOW: hidden;
+        TEXT-OVERFLOW: ellipsis;
+    }
+    .divRatingClass table tr td:last-child {
+        position: relative;
+    }
+    .arrow_box input{
+        margin-bottom: 0;
+    }
+    .arrow_box {
+	position: relative;
+	background: #fff;
+	border: 1px solid #E3B4B4;
+}
+.arrow_box:after, .arrow_box:before {
+	left: 100%;
+	top: 32%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrow_box:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-left-color: #E3B4B4;
+	border-width: 7px;
+	margin-top: -7px;
+}
+.arrow_box:before {
+	border-color: rgba(204, 204, 204, 0);
+	border-left-color: #ccc;
+	border-width: 8px;
+	margin-top: -8px;
+}
+    /**/
+
+    .grdStyle {
+        border-spacing: 3px !important;
+        border-collapse: collapse !important;
+    }
+            .grdStyle > tbody > tr > th {background-color:#EEEEEE;border: 1px solid gray !important;padding:3px !important; }
+            .grdStyle > tbody > tr > td {
+                border: 1px solid gray !important;
+                padding:3px !important;
+                /*background-color:#FCFCF3;*/
+            }
+            .grdStyle > tbody > tr > th {
+                background-color:#DADAB8;
+            }
+</style>
+
+
+
+
+
+<div align="center" style="position:relative">
+    <div style="overflow-y:auto; max-height:450px;" class="divRatingClass">
+    <div>
+
+	</div>
+        </div>
+    
+    <input type="hidden" name="ctl00$ContentPlaceHolder1$wucStudentRequestBoxDetails2$hfFeedBackStatus" id="hfFeedBackStatus" />
+    
+
+</div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade accordion-item" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                <h2 class="accordion-header d-lg-none" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Mentor Details</button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse list-accordion collapse show d-lg-block" aria-labelledby="headingOne" data-bs-parent="#myTabContent">
+                    <div id="divStudentMentorDetails" class="accordion-body">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade accordion-item" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+                <h2 class="accordion-header d-lg-none" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Virtual Card Download
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse list-accordion collapse d-lg-block" aria-labelledby="headingThree" data-bs-parent="#myTabContent">
+                    <div class="accordion-body">
+                        <h3 class="heading mb-3"><i class="fa fa-address-card" aria-hidden="true"></i>Virtual Card Download</h3>
+                        <div class="portlet-body">
+                            <div class="d-flex flex-column card-content">
+                                <img class="img-fluid" src="/assets/upload-images/sample-icard.png" alt="I Card" width="285" />
+                                <div class="button-submit d-flex mt-3">
+                                    <button class="btn view-btn d-flex">
+                                        <img src="/assets/upload-images/icon-view.svg" class="img-fluid" />View</button>
+                                    <button class="btn download-btn d-flex">
+                                        <img src="/assets/upload-images/icon-download.svg" class="img-fluid" />Download</button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade accordion-item" id="job-tab-pane" role="tabpanel" aria-labelledby="job-tab" tabindex="0">
+                <h2 class="accordion-header d-lg-none" id="headingSix">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        Job Alert
+                    </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse list-accordion collapse d-lg-block" aria-labelledby="headingSix" data-bs-parent="#myTabContent">
+                    <div class="accordion-body">
+                        <div class="portlet box-shadow-common d-none" id="div-JobAlert" style="margin-top: 15px;">
+                            <h3 class="heading"><i class="fa fa-briefcase" aria-hidden="true"></i>Job Alert</h3>
+                            <div id="ContentPlaceHolder1_UpdatePanel2" class="my-queries">
+	
+
+                                    <div class="portlet">
+                                        <h3 class="heading"><i class="fa fa-question-circle" aria-hidden="true"></i>My Question Or Queries</h3>
+                                        <div class="portlet-body">
+                                            <div class="query-block">
+                                                <div class="table-scroll">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Total</th>
+                                                                <th>Closed</th>
+                                                                <th>Open</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <a id="ContentPlaceHolder1_hlTotal" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$hlTotal&#39;,&#39;&#39;)">0</a></td>
+                                                                <td>
+                                                                    <a id="ContentPlaceHolder1_hlClose" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$hlClose&#39;,&#39;&#39;)">0</a></td>
+                                                                <td>
+                                                                    <a id="ContentPlaceHolder1_hlOpen" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$hlOpen&#39;,&#39;&#39;)">0</a></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    
+
+                                    <div id="divCrm_Details" class="modal fade"
+                                        role="dialog"
+                                        style="z-index: 999999; background: rgba(255, 255, 255, 0.9);">
+                                        <div class="modal-dialog" style="width: 95%;">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close"
+                                                        data-dismiss="modal"
+                                                        onclick="OpenNewPopUp('0','divCrm_Details');">
+                                                        &times;</button>
+                                                    <h4 class="modal-title text-center">My Question Or Queries</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+
+
+<style type="text/css">
+    .DisplayDesc {
+        width: 290px;
+        height: 50px;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+    .DisplayDiv {
+        width: 290px;
+        OVERFLOW: hidden;
+        TEXT-OVERFLOW: ellipsis;
+    }
+    .divRatingClass table tr td:last-child {
+        position: relative;
+    }
+    .arrow_box input{
+        margin-bottom: 0;
+    }
+    .arrow_box {
+	position: relative;
+	background: #fff;
+	border: 1px solid #E3B4B4;
+}
+.arrow_box:after, .arrow_box:before {
+	left: 100%;
+	top: 32%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrow_box:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-left-color: #E3B4B4;
+	border-width: 7px;
+	margin-top: -7px;
+}
+.arrow_box:before {
+	border-color: rgba(204, 204, 204, 0);
+	border-left-color: #ccc;
+	border-width: 8px;
+	margin-top: -8px;
+}
+    /**/
+
+    .grdStyle {
+        border-spacing: 3px !important;
+        border-collapse: collapse !important;
+    }
+            .grdStyle > tbody > tr > th {background-color:#EEEEEE;border: 1px solid gray !important;padding:3px !important; }
+            .grdStyle > tbody > tr > td {
+                border: 1px solid gray !important;
+                padding:3px !important;
+                /*background-color:#FCFCF3;*/
+            }
+            .grdStyle > tbody > tr > th {
+                background-color:#DADAB8;
+            }
+</style>
+
+
+
+
+
+<div align="center" style="position:relative">
+    <div style="overflow-y:auto; max-height:450px;" class="divRatingClass">
+    <div>
+
+	</div>
+        </div>
+    
+    <input type="hidden" name="ctl00$ContentPlaceHolder1$wucStudentRequestBoxDetails$hfFeedBackStatus" id="hfFeedBackStatus" />
+    
+
+</div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-5">
+            <div class="info-section info-section-events">
+                <h5 class="mb-3 d-flex align-items-center" id="div-events">
+                    <span class="info bg-darkRed d-flex align-items-center justify-content-center">
+                        <img class="img-fluid" src="/assets/upload-images/icon-info.svg" alt="Upcoming Events" width="10" />
+                    </span>Upcoming Events
+                </h5>
+                <div class="row contentData">
+                    <div class="col-sm-12">
+                        <div class="events-bar alert alert-danger">There is no upcoming events scheduled so far..</div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="col-md-6 mb-5">
+            <div class="info-section">
+                <h5 class="mb-3 d-flex align-items-center"><span class="info bg-darkRed d-flex align-items-center justify-content-center">
+                    <img class="img-fluid" src="/assets/upload-images/icon-annoucements.svg" alt="Announcements" width="12" /></span>Announcements</h5>
+                <div class="contentData contentData-announcements">
+                    <div class="annoucements-data">
+                        <div class="row">
+                            
+                            <div class="col-sm-12">
+                                <div class="portlet-body">
+                                    <input type="hidden" name="ctl00$ContentPlaceHolder1$wucDisplayAnnouncements1$hfPageNumber" id="hfPageNumber" value="1" />
+<input type="hidden" name="ctl00$ContentPlaceHolder1$wucDisplayAnnouncements1$hfIsAnnouncement" id="hfIsAnnouncement" />
+<input type="hidden" name="ctl00$ContentPlaceHolder1$wucDisplayAnnouncements1$hfActiveAnnouncementTab" id="hfActiveAnnouncementTab" />
+
+
+<div class="announcement-bg">
+
+    <div id="news-panel">
+        <div>
+            <div class="annoucment-search">
+                <div class="row">
+                    <div class="col-sm-7 col-xs-7">
+                        <div class="search-ann">
+                            <input type="text" class="inp-box" placeholder="Search Announcement" id="txtAnnouncementFilter">
+                            <input type="submit" class="search-bar-btn" id="btnAnnouncementFilter">
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-xs-5">
+                        <div class="search-ann">
+                            <select name="ctl00$ContentPlaceHolder1$wucDisplayAnnouncements1$ddlAnnouncementsMenu" id="ddlAnnouncementsMenu" class="search-ann">
+	<option value="ALL">ALL</option>
+	<option value="Academics">Academics</option>
+	<option value="Accounts">Accounts</option>
+	<option value="Administrative">Administrative</option>
+	<option value="Cultural">Cultural</option>
+	<option value="Examination">Examination</option>
+	<option value="Intl. Relations">Intl. Relations</option>
+	<option value="Placement">Placement</option>
+	<option value="PolyTechnic">PolyTechnic</option>
+	<option value="Registrar Office">Registrar Office</option>
+	<option value="Sports">Sports</option>
+	<option value="UCRD">UCRD</option>
+
+</select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <span id="AnnouncementLoading1" style="height: 20px; position: absolute; top: 30px; right: 350px; display: none;">
+                <span class="l-1"></span>
+                <span class="l-2"></span>
+                <span class="l-3"></span>
+                <span class="l-4"></span>
+                <span class="l-5"></span>
+                <span class="l-6"></span>
+            </span>
+            <span style="position: absolute; top: 10px; right: 115px;">
+                
+                
+                &nbsp;<span>
+                    
+                </span>
+            </span>
+        </div>
+        <div class="news-section custom-news-outer">
+            <div id="AnnouncementLoading" class="div_Announcement_Refreshing" style="" align="center">
+                <div id="loader">
+                    <img src="assets/uploads/loader.gif">
+                    <p>Loading Announcement...</p>
+                </div>
+            </div>
+            <div class="all-announcements-listing scroll-bar" id="Announcementscroll">
+                <div id="divAnnouncements"></div>
+            </div>
+        </div>
+        <div id="divAnnouncementMenu" class="Announcement_Menu" style="display: none">
+            <div class="AnnouncementSubMenu">
+            </div>
+        </div>
+        <div id="divOpenAnnouncementMenu" class="AnnouncementMenu_Arrow">
+        </div>
+    </div>
+
+</div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-8 padd-r-7 padd-sm-15">
+                <div class="row">
+                    <div class="col-sm-6 padd-l-7 padd-xs-15 padding-0">
+                        <div class="row">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="margin-15"></div>
+            </div>
+            
+            
+            
+            
+            
+            
+            
+        </div>
+    </div>
+
+
+
+
+    
+
+    <div id="divcrmHistoryView" class="modal fade" role="dialog" style="z-index: 999999; background: rgba(255, 255, 255, 0.9);">
+        <div class="modal-dialog" style="width: 95%;">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" onclick="OpenNewPopUp('0','divcrmHistoryView');OpenNewPopUp('1','divCrm_Details');ResponsiveTab('rgSWCRequestDetail');">&times;</button>
+                    <h4 class="modal-title text-center">Closed Conversation History Details</h4>
+                </div>
+                <div class="modal-body">
+                    
+
+<div id="divSWCReply" align="center" style="position: relative">
+
+    <div id="divSWCCloseStudentReply" class="btnpopupclose" style="z-index:99" onclick="CloseSWCReplyConversationPOPup()">
+        <div class="closebtn" style="color: #000; position: absolute; top: -37px;">
+            X
+        </div>
+    </div>
+    
+
+
+    <div style="width: 100%; background: #fff; border: 1px solid #c1c1c1;">
+        <br />
+        <div id="divSWCMessages"  style="color: rgb(0, 0, 0); padding-left: 14px; height: 200px !important; overflow-y: scroll"></div>
+        <div id="div_SWC_ReplyButton">
+            
+            <p style="text-align: center">s
+                <textarea name="ctl00$ContentPlaceHolder1$wucSWCStudentReply$txtSWCMsgReply" rows="2" cols="20" id="txtSWCMsgReply" placeholder="Reply Area" style="background-color: #fff; resize: none; border: 1px solid #ddd; border-radius: 6px; width: 96%; padding: 10px 15px; height: 70px; margin: auto;">
+</textarea>
+                &nbsp;
+
+            </p>           
+                <p Style="background-color: #fff; resize: none;  width: 96%; padding: 10px 15px; height: 70px; margin: auto;">
+                <i class="fa fa-paperclip" aria-hidden="true"></i>Select File (If any)(Max file size 1 MB):- 
+                <span style="color: red">only (pdf/jpg/jpeg) File.</span>
+                <img id="imgPic" />
+                <input type="file" name="ctl00$ContentPlaceHolder1$wucSWCStudentReply$flpAttachment" id="flpAttachment" onchange="ValidateDocumentExtensionGP(this)" />
+                <input type="hidden" name="ctl00$ContentPlaceHolder1$wucSWCStudentReply$hfImage" id="hfImage" />
+                
+                </p>
+
+            <div id="divCM" style="display:none; padding-top:10px">Do you want to pass the request to chancellor office&nbsp;&nbsp; <select name="ctl00$ContentPlaceHolder1$wucSWCStudentReply$ddlPassRequestToChancellor" id="ddlPassRequestToChancellor">
+	<option value="">Select</option>
+	<option value="Y">Yes</option>
+
+</select>
+                
+            </div>
+            <span id="lblPassToChancellorMsg"></span>
+            <p style="text-align: center">
+                
+                
+                <input type="submit" name="ctl00$ContentPlaceHolder1$wucSWCStudentReply$btnSWCMessageReply" value="Submit" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$wucSWCStudentReply$btnSWCMessageReply&quot;, &quot;&quot;, true, &quot;SWCreply&quot;, &quot;&quot;, false, false))" id="btnSWCMessageReply" />                
+            </p>
+
+            <p>
+                &nbsp;
+            </p>
+        </div>
+        
+        <input type="hidden" name="ctl00$ContentPlaceHolder1$wucSWCStudentReply$hfSWCMessageReplyId" id="hfSWCMessageReplyId" />
+    </div>
+</div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+
+
+
+    
+
+    <div id="divSubjectFeedback" class="sidenav" style="transition: all 0.5s ease 0s; width: 0px; z-index: 15;">
+        <div style="display: block; margin: auto; width: 90%;">
+
+            <h2 style="font-size: 18px; text-align: center; color: #d30505; padding: 0px">Student Class Feedback
+
+
+            </h2>
+
+            <div style="background: #fff; max-height: 500px;" align="center">
+                <div class="closebtn" onclick="CloseSubjectFeedback();">
+                </div>
+            </div>
+
+            <div id="slider" style="height: 550px !important; overflow-y: auto">
+                <div class="accordion ui-accordion ui-widget ui-helper-reset" id="accordionCourses" role="tablist">
+                    
+                            <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">25CST-206 - Cloud Security | 25BCS-AIML-1 | 11:20 - 12:10 PM</h3>
+                            <div id="ui-accordion-accordionCourses-panel-0" class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active">
+                                
+
+                                <div>
+                                    <div class="card-body">
+                                        <table class="table table-striped" style="display: none">
+                                            <tr>
+                                                <td>Section</td>
+                                                <td>25BCS-AIML-1</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Day</td>
+                                                <td>Tue</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Timing</td>
+                                                <td>11:20 - 12:10 PM</td>
+                                            </tr>
+                                        </table>
+
+                                        <div class="mt-3" style="font-size: 12px">
+                                            
+                                        </div>
+
+                                        <div class="mt-3 text-right">
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl00$hf_CourseCode" id="ContentPlaceHolder1_rptCourses_hf_CourseCode_0" value="25CST-206" />
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl00$hf_Section" id="ContentPlaceHolder1_rptCourses_hf_Section_0" value="25BCS-AIML-1" />
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl00$hf_Day" id="ContentPlaceHolder1_rptCourses_hf_Day_0" value="Tue" />
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl00$hf_Timing" id="ContentPlaceHolder1_rptCourses_hf_Timing_0" value="11:20 - 12:10 PM" />
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl00$hf_IsBtnVisible" id="ContentPlaceHolder1_rptCourses_hf_IsBtnVisible_0" value="1" />
+                                            <input type="submit" name="ctl00$ContentPlaceHolder1$rptCourses$ctl00$btnSaveResponse" value="Submit Now" id="btnSaveResponse" class="btn btn-primary" />
+                                            <span id="ContentPlaceHolder1_rptCourses_lblmsg_0"><b><font color="Red"></font></b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">25CST-207 - Computer Networks | 25BCS-AIML-1 | 10:25 - 11:15 AM</h3>
+                            <div id="ui-accordion-accordionCourses-panel-0" class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active">
+                                
+
+                                <div>
+                                    <div class="card-body">
+                                        <table class="table table-striped" style="display: none">
+                                            <tr>
+                                                <td>Section</td>
+                                                <td>25BCS-AIML-1</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Day</td>
+                                                <td>Tue</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Timing</td>
+                                                <td>10:25 - 11:15 AM</td>
+                                            </tr>
+                                        </table>
+
+                                        <div class="mt-3" style="font-size: 12px">
+                                            
+                                        </div>
+
+                                        <div class="mt-3 text-right">
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl01$hf_CourseCode" id="ContentPlaceHolder1_rptCourses_hf_CourseCode_1" value="25CST-207" />
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl01$hf_Section" id="ContentPlaceHolder1_rptCourses_hf_Section_1" value="25BCS-AIML-1" />
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl01$hf_Day" id="ContentPlaceHolder1_rptCourses_hf_Day_1" value="Tue" />
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl01$hf_Timing" id="ContentPlaceHolder1_rptCourses_hf_Timing_1" value="10:25 - 11:15 AM" />
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$rptCourses$ctl01$hf_IsBtnVisible" id="ContentPlaceHolder1_rptCourses_hf_IsBtnVisible_1" value="1" />
+                                            <input type="submit" name="ctl00$ContentPlaceHolder1$rptCourses$ctl01$btnSaveResponse" value="Submit Now" id="btnSaveResponse" class="btn btn-primary" />
+                                            <span id="ContentPlaceHolder1_rptCourses_lblmsg_1"><b><font color="Red"></font></b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                </div>
+
+
+
+
+
+
+            </div>
+            <div style="background: #fff; max-height: 500px;" align="center">
+            <div class="closebtn" onclick="CloseSubjectFeedback();">
+                Close(X)
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <input type="hidden" name="ctl00$ContentPlaceHolder1$hfdfdfds_sid" id="hfdfdfds_sid" value="1732" />
+    <input type="hidden" name="ctl00$ContentPlaceHolder1$hfdfdfds_acc" id="hfdfdfds_acc" value="125028355" />
+
+    
+
+    
+
+    <div id="divStudentPendingEligibility" class="sidenav" style="transition: all 0.5s ease 0s; width: 0px; z-index: 15;">
+        <div style="display: block; margin: auto; width: 90%;">
+            <div style="height: 550px !important; overflow-y: auto; background: #fff">
+                
+
+<style>
+        #div_feedback table td {
+            vertical-align: top;
+            padding: 5px 15px;
+            display: inline-block;
+            margin: 5px 5px 5px 0;
+        }
+
+            #div_feedback table td label {
+                font-weight: normal;
+                line-height: 14px;
+                cursor: pointer;
+            }
+
+            #div_feedback table td input {
+                margin-right: 5px !important;
+                cursor: pointer;
+            }
+
+        .spacer {
+            margin-top: 40px;
+        }
+    </style>
+
+    <div class="form_header">Survey for Regular Admissions</div>
+    <div id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_pnlDate">
+	
+            <div id="div_feedback" style="padding-left:20px">
+                <div class="col-md-12">
+                    <div>
+                        <b>1. How did you hear about Chandigarh University for the first time?</b>
+                    </div>
+                    <div>
+                        <span id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1"><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_0" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1" value="Word of mouth" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1$0\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_0">Word of mouth</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_1" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1" value="Social Media" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1$1\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_1">Social Media</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_2" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1" value="Google Search" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1$2\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_2">Google Search</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_3" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1" value="Marketing team/Seminars " onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1$3\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_3">Marketing team/Seminars </label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_4" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1" value="Education Fair" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1$4\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_4">Education Fair</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_5" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1" value="Newspaper advertisement" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1$5\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_5">Newspaper advertisement</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_6" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1" value="Television Ad " onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1$6\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_6">Television Ad </label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_7" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1" value="Referred by alumni/student" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1$7\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_7">Referred by alumni/student</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_8" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1" value="0" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ1$8\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ1_8">Other, please specify</label></span>
+                    </div>
+                    
+                </div>
+
+
+                <div class="col-md-12 spacer">
+                    <div>
+                        <b>2. What made you decide to enroll at Chandigarh University?</b>
+                    </div>
+                    <div>
+                        <span id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2"><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_0" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="Ranking, Accreditations, and certifications" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$0\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_0">Ranking, Accreditations, and certifications</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_1" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="Placement" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$1\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_1">Placement</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_2" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="Types of courses offered" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$2\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_2">Types of courses offered</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_3" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="Campus life " onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$3\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_3">Campus life </label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_4" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="International collaborations " onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$4\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_4">International collaborations </label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_5" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="Holistic Academic model " onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$5\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_5">Holistic Academic model </label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_6" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="Location Feasibility" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$6\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_6">Location Feasibility</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_7" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="Research" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$7\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_7">Research</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_8" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="Entrepreneurship opportunities" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$8\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_8">Entrepreneurship opportunities</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_9" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2" value="0" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ2$9\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ2_9">Other, please specify</label></span>
+                    </div>
+                    
+                </div>
+
+
+                <div class="col-md-12 spacer">
+                    <div>
+                        <strong>3</strong><b>. Where was Chandigarh University ranked in the order of your preferences?</b>
+                    </div>
+                    <div>
+                        <span id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4"><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_0" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4" value="First" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4$0\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_0">First</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_1" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4" value="Second" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4$1\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_1">Second</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_2" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4" value="Third" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4$2\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_2">Third</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_3" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4" value="Fourth" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4$3\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_3">Fourth</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_4" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4" value="0" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ4$4\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ4_4">Others, please specify</label></span>
+                    </div>
+                    
+                </div>
+
+                <div class="col-md-12 spacer">
+                    <div>
+                        <b>4. On a scale of 1 to 5 how would you rate your academic experience at Chandigarh University so far?  (1 being the lowest and 5 being the highest)</b>
+                    </div>
+                    <div>
+                        <span id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8"><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_0" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ8" value="1" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_0">1</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_1" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ8" value="2" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_1">2</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_2" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ8" value="3" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_2">3</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_3" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ8" value="4" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_3">4</label><input id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_4" type="radio" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$rdbQ8" value="5" /><label for="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_rdbQ8_4">5</label></span>
+                    </div>
+                    
+                </div>
+
+                <div class="col-md-12 text-center">
+                    <input type="submit" name="ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$btnSubmit" value="Submit" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$wucFreshmenAdmissionSurvey$btnSubmit&quot;, &quot;&quot;, true, &quot;Xsubmit&quot;, &quot;&quot;, false, false))" id="ContentPlaceHolder1_wucFreshmenAdmissionSurvey_btnSubmit" />
+                </div>
+
+            </div>
+
+        
+</div>
+
+
+            </div>
+        </div>
+    </div>
+
+    
+
+       
+
+    <div id="divStudentMSTFeedback" class="sidenav" style="transition: all 0.5s ease 0s; width: 0px; z-index: 15;">
+        <div style="display: block; margin: auto; width: 90%;">
+            <div style="height: 550px !important; overflow-y: auto; background: #fff">
+                
+<style>
+    #div_feedback table td {
+        vertical-align: top;
+        padding: 5px 15px;
+        display: inline-block;
+        margin: 5px 5px 5px 0;
+    }
+
+        #div_feedback table td label {
+            font-weight: normal;
+            line-height: 14px;
+            cursor: pointer;
+        }
+
+        #div_feedback table td input {
+            margin-right: 5px !important;
+            cursor: pointer;
+        }
+
+    .container {
+        
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(12,15,20,0.06);
+    }
+
+    h1 {
+        font-size: 1.25rem;
+        margin: 0 0 8px;
+    }
+
+    p.lead {
+        margin: 0 0 20px;
+        color: var(--muted);
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    input[type="text"], select, textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #e6e9ee;
+        border-radius: 6px;
+        font-size: 0.95rem;
+    }
+
+    .section {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid #eef2f7;
+    }
+
+    .q {
+        margin: 12px 0;
+        padding: 10px;
+        border-radius: 8px;
+        background: var(--card);
+    }
+
+    .choices {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+    }
+
+    .choice {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 0;
+        background: var(--accent);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .muted {
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+
+    .full {
+        grid-column: 1/ -1;
+    }
+
+    .footer {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 16px;
+    }
+
+    pre {
+        background: #0b1220;
+        color: #e6eef8;
+        padding: 10px;
+        border-radius: 8px;
+        overflow: auto;
+    }
+
+    @media (max-width:720px) {
+        .grid {
+            grid-template-columns: 1fr;
+        }
+
+        .container {
+            margin: 12px;
+        }
+    }
+</style>
+
+
+<div class="container" id="div_feedback">
+    <h2 style="text-align:center;">Course, Scheme & Teacher Feedback Form (MST-1)</h2>
+
+
+
+    <!-- Student Details -->
+
+    <div class="section">
+        <center>
+        <h3>Has your MST-1 been conducted?</h3>
+        <span id="ContentPlaceHolder1_wucMst1StudentFeedback_rblMSTHeld"><input id="ContentPlaceHolder1_wucMst1StudentFeedback_rblMSTHeld_0" type="radio" name="ctl00$ContentPlaceHolder1$wucMst1StudentFeedback$rblMSTHeld" value="1" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucMst1StudentFeedback$rblMSTHeld$0\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucMst1StudentFeedback_rblMSTHeld_0">Yes</label><input id="ContentPlaceHolder1_wucMst1StudentFeedback_rblMSTHeld_1" type="radio" name="ctl00$ContentPlaceHolder1$wucMst1StudentFeedback$rblMSTHeld" value="0" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$wucMst1StudentFeedback$rblMSTHeld$1\&#39;,\&#39;\&#39;)&#39;, 0)" /><label for="ContentPlaceHolder1_wucMst1StudentFeedback_rblMSTHeld_1">No</label></span>
+            </center>
+    </div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </div>
+
+    
+
+
+    
+
+    <div id="divStudentHostelFedback" class="sidenav" style="transition: all 0.5s ease 0s; width: 0px; z-index: 15;">
+        <div style="display: block; margin: auto; width: 90%;">
+            <div style="height: 550px !important; overflow-y: auto; background: #fff">
+                
+                <table style="height: 100%; width: 100%;">
+        <tr>
+            <td class="form_header">Student Hostel Feedback Survey
+                <input type="hidden" name="ctl00$ContentPlaceHolder1$hfCourseCode" id="hfCourseCode" />
+                <input type="hidden" name="ctl00$ContentPlaceHolder1$hfFinalFeedback" id="hfFinalFeedback" />
+            </td>
+        </tr>
+        
+        <tr id="trQuestions" >
+            <td>
+                <div id="divQuestions">
+                </div>
+            </td>
+        </tr>
+
+    </table>
+
+            </div>
+        </div>
+    </div>
+
+    
+
+
+    
+
+    <input type="hidden" name="ctl00$ContentPlaceHolder1$hfIsFeefnback" id="hfIsFeefnback" value="1" />
+    <input type="hidden" name="ctl00$ContentPlaceHolder1$HiddenField1" id="HiddenField1" value="2" />
+
+                
+            </div>
+            <footer id="footer" class="footer d-flex flex-column">
+			    <div class="top-footer d-flex align-items-center justify-content-center flex-column">
+				    <a href="#"><img src="/assets/upload-images/logo-black.svg" class="img-fluid" alt="Chandigarh University" /></a>
+				    <ul class="social-icons d-flex">
+					    <li><a href="#"><img src="/assets/upload-images/icon-fb.svg" class="img-fluid" alt="Facebook" /></a></li>
+					    <li><a href="#"><img src="/assets/upload-images/icon-twitter.svg" class="img-fluid" alt="Twitter" /></a></li>
+					    <li><a href="#"><img src="/assets/upload-images/icon-vimeo.svg" class="img-fluid" alt="Vimeo" /></a></li>
+					    <li><a href="https://www.youtube.com/@Chandigarhuniversity"><img src="/assets/upload-images/icon-youtube.svg" class="img-fluid" alt="Youtube" width="30" /></a></li>
+				    </ul>
+			    </div>
+                <div class="text-end">
+                    <a href="bugreport.aspx" id="a_bugreport" title="Report a bug">Report a Bug  <i class="fa fa-bug" aria-hidden="true"></i></a>
+                </div>
+			    <div class="bottom-footer d-flex justify-content-between">
+					<div class="footer-txt">© 2025 Chandigarh University, Lucknow - Kanpur Highway-27, Unnao, Uttar Pradesh, India.</div>
+					<div class="footer-txt"><a href="tel:18002701411"><img src="/assets/upload-images/icon-phone.svg" class="img-fluid" width="15" alt="phone" />General Helpline No: 18002701411</a></div>
+					<div class="footer-txt"><a href="mailto:studentcare@culko.in"><img src="/assets/upload-images/icon-email.svg" class="img-fluid" width="15" alt="Email ID" />studentcare@culko.in</a></div>
+				</div>
+		    </footer>
+            
+        </div>
+
+        
+
+        <div id="div_help_popup" class="modal fade" role="dialog" style="z-index: 99999; background: rgba(255, 255, 255, 0.9); display:none;">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" onclick="OpenNewPopUp('0','div_help_popup')">&times;</button>
+                        <h4 class="modal-title text-center">UIMS HELP</h4>
+                    </div>
+                    <div id="help_content" style="height: 450px; overflow-y: scroll;" class="modal-body">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <!-- Modal -->
+
+        
+
+        
+
+        
+
+
+        
+
+        
+
+        
+
+
+
+
+        
+
+        <div id="div_libpopup" class="modal fade" role="dialog" style="z-index: 999999; background: rgba(255, 255, 255, 0.9); display:none;">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-center w-100">LIBRARY MESSAGES</h4>
+                        <button type="button" class="close" data-dismiss="modal" onclick="OpenNewPopUp('0','div_libpopup')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <ul id="tabs" class="nav nav-tabs nav-tabMessage">
+                            <li class="active"><a data-toggle="tab" href="#t1">Pending</a></li>
+                            <li><a data-toggle="tab" href="#t2">History</a></li>
+                        </ul>
+                        <div id="div_lib_content">
+                        </div>
+                        <!-- Bootstrap Accordion -->
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
+                        <!-- /Bootstrap Accordion -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        
+
+
+
+
+        
+
+        <div id="div_celebrations" class="sidenav" style="transition: all 0.5s ease 0s; width: 0px; z-index: 15;">
+            <div style="display: block; margin: auto; width: 100%;">
+
+                <div style="background: #fff;">
+                    <div class="div_celebrations_Popup">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+
+        
+
+        <div id="divForcePopUp" class="divForcePopup modal fade" role="dialog" style="z-index: 99999; background: rgba(255, 255, 255, 0.9);">
+            <div class="modal-dialog" style="width: 98%; max-width:98%;">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" onclick="OpenNewPopUp('0','divForcePopUp')">×</button>
+                        <h4 class="modal-title text-center w-100">IMPORTANT INFORMATION</h4>
+                    </div>
+                    <div class="modal-body" id="divForcePopUp_content">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+
+
+
+
+        
+        <div id="UpdateProgress1" style="display:none;">
+	
+                <div id="loader-wrapper">
+                    <div id="loader">
+                        <img src="assets/uploads/loader.gif">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            
+</div>
+        
+        
+
+
+        <script src="assets/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript" src="assets/js/materialize.js"></script>
+        <script type="text/javascript" src="Scripts/UIMSHome4.0.js?version=4.2"></script>
+        <script type="text/javascript" src="n-js/jquery.scrollbar.js"></script>
+        <script type="text/javascript" src="Scripts/toastr8.min.js"></script>
+        <script type="text/javascript" src="Scripts/jquery-ui.js"></script>
+
+        
+
+
+        
+    <script>
+        $(".mob-search a").click(function(){
+            $(".page-search").toggleClass("open");
+        });
+    </script>
+    <script>
+        const myElement = document.getElementById('myElement');
+        const searchBox = document.getElementById('searchBox');
+        searchBox.addEventListener('click', function () {
+            myElement.classList.toggle('searchOuter');
+        });
+        function slideLeft() {
+            const mainWrap = document.getElementById('mainWrap');
+            mainWrap.classList.toggle('slideLeft');
+            const sidebarMenu = document.getElementById('uims_sidebars');
+            //uims_sidebar.classList.toggle('slideLeft');
+        }
+        function flip() {
+            $('.card-thumb').toggleClass('flipped');
+        }
+    </script>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+setTimeout(function () {    $('#divSubjectFeedback').css('width', '100%'); }, 100);Sys.Application.add_init(function() {
+    $create(AjaxControlToolkit.AlwaysVisibleControlBehavior, {"HorizontalSide":1,"VerticalSide":1,"id":"AlwaysVisibleControlExtender5"}, null, null, $get("UpdateProgress1"));
+});
+//]]>
+</script>
+</form>
+</body>
+</html>
