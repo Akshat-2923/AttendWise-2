@@ -4,7 +4,7 @@ GET /predictor       — renders predictor.html
 GET /api/predictor   — per-subject calendar-aware attendance forecasts
 """
 
-from flask import Blueprint, session, redirect, url_for, jsonify, render_template
+from flask import Blueprint, session, redirect, url_for, jsonify
 
 from scrapers.attendance_scraper import AttendanceScraper
 from scrapers.timetable_scraper import TimetableScraper
@@ -14,13 +14,6 @@ from core.predictor import forecast_all
 import pandas as pd
 
 predictor_bp = Blueprint("predictor", __name__)
-
-
-@predictor_bp.route("/predictor")
-def predictor_page():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("predictor.html")
 
 
 @predictor_bp.route("/api/predictor")

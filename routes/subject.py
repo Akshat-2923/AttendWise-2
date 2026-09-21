@@ -4,20 +4,13 @@ GET /api/subject/<code>  — per-subject detail for Subject Detail Page
 GET /subject             — renders subject.html (query param: ?code=25CSH-114)
 """
 
-from flask import Blueprint, session, redirect, url_for, jsonify, render_template
+from flask import Blueprint, session, redirect, url_for, jsonify
 from scrapers.attendance_scraper import AttendanceScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
 from core.sessions import login_sessions
 import pandas as pd
 
 subject_bp = Blueprint("subject", __name__)
-
-
-@subject_bp.route("/subject")
-def subject_page():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("subject.html")
 
 
 @subject_bp.route("/api/subject/<code>")

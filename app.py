@@ -1,26 +1,18 @@
 import os
 import warnings
-
 from dotenv import load_dotenv
-from flask import (
-    Flask,
-    render_template,
-    request,
-    redirect,
-    url_for,
-    session,
-    send_file,
-    flash,
-    send_file
-)
+from flask import Flask, session
+from flask_cors import CORS
 
-from io import BytesIO
-
+# Import scrapers & logic
 from scrapers.login_scraper import LoginScraper
 from scrapers.attendance_scraper import AttendanceScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
-from routes.timetable_routes import timetable_bp
 from core.sessions import login_sessions
+import pandas as pd
+
+# Import API blueprints
+from routes.timetable_routes import timetable_bp
 from routes.health_routes import health_bp
 from routes.subject import subject_bp
 from routes.bunk_routes import bunk_bp
@@ -30,18 +22,15 @@ from routes.what_if_routes import what_if_bp
 from routes.weekly_routes import weekly_bp
 from routes.calendar_routes import calendar_bp
 from routes.auth_routes import auth_bp
-import pandas as pd
-from flask_cors import CORS
 
-# Load .env file (no-op if it doesn't exist)
+# Load .env file
 load_dotenv()
 
 app = Flask(__name__)
+# Allow cross-origin requests from local Next.js environment
 CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
 
-app.register_blueprint(timetable_bp)
-
-# --- Secret key from environment ---
+# --- Secret key configuration ---
 _secret = os.environ.get("SECRET_KEY")
 if not _secret:
     warnings.warn(
@@ -51,6 +40,9 @@ if not _secret:
     )
     _secret = "dev-fallback-insecure-key"
 app.secret_key = _secret
+
+# --- Register API Blueprints ---
+app.register_blueprint(timetable_bp)
 app.register_blueprint(health_bp)
 app.register_blueprint(subject_bp)
 app.register_blueprint(bunk_bp)
@@ -61,156 +53,24 @@ app.register_blueprint(weekly_bp)
 app.register_blueprint(calendar_bp)
 app.register_blueprint(auth_bp)
 
-@app.route("/service-worker.js")
-def service_worker():
-    return send_file(
-        "static/service-worker.js",
-        mimetype="application/javascript",
-    )
-
-@app.route("/")
-def home():
-
-    return redirect(
-        url_for("login")
-    )
-
-
-@app.route(
-    "/login",
-    methods=["GET", "POST"]
-)
-def login():
-
-    if request.method == "POST":
-
-        uid = request.form["uid"]
-
-        password = request.form["password"]
-
-        captcha = request.form["captcha"]
-
-        try:
-
-            if uid not in login_sessions:
-
-                flash(
-                    "Load captcha first"
-                )
-
-                return redirect(
-                    url_for("login")
-                )
-
-            scraper = login_sessions[
-                uid
-            ]["scraper"]
-
-            scraper.complete_login(
-                uid,
-                password,
-                captcha
-            )
-            
-            home = scraper.session.get(
-                "https://student.culko.in/StudentHome.aspx"
-            )
-
-            print("\nAFTER LOGIN URL:")
-            print(home.url)
-            session["uid"] = uid
-
-            session["logged_in"] = True
-
-            return redirect(
-                url_for(
-                    "dashboard"
-                )
-            )
-
-        except Exception as e:
-
-            flash(str(e))
-
-    return render_template(
-        "login.html"
-    )
-@app.route("/captcha")
-def captcha():
-
-    uid = request.args.get(
-        "uid"
-    )
-
-    if not uid:
-
-        return ""
-
-    scraper = LoginScraper()
-
-    image_bytes = scraper.start_login(
-        uid
-    )
-
-    login_sessions[uid] = {
-        "scraper": scraper
-    }
-
-    return send_file(
-        BytesIO(image_bytes),
-        mimetype="image/jpeg"
-    )
-
-@app.route("/dashboard")
-def dashboard():
-
-    if not session.get(
-        "logged_in"
-    ):
-        return redirect(
-            url_for("login")
-        )
-
-    summary = session.get(
-        "summary",
-        []
-    )
-
-    return render_template(
-        "dashboard.html",
-        summary=summary
-    )
-    
+# --- Legacy core API endpoints (now moved/moving to routes) ---
 @app.route("/api/attendance")
 def api_attendance():
-    print(f"DEBUG: session contains: {dict(session)}")
-    print(f"DEBUG: login_sessions keys: {list(login_sessions.keys())}")
-    
     if "uid" not in session or session["uid"] not in login_sessions:
         return {"error": "Unauthorized"}, 401
 
     uid = session["uid"]
-
-    scraper = login_sessions[
-        uid
-    ]["scraper"]
+    scraper = login_sessions[uid]["scraper"]
 
     try:
-        attendance = (
-            AttendanceScraper(
-                scraper.session
-            )
-            .get_attendance()
-        )
+        attendance = AttendanceScraper(scraper.session).get_attendance()
     except Exception as e:
-        # ERP session expired — scraper lands on Login.aspx
-        # and can't find the attendance link
+        # ERP session expired
         session.clear()
         login_sessions.pop(uid, None)
         return {"error": "Session expired. Please log in again.", "redirect": "/login"}, 401
 
     df = pd.DataFrame(attendance)
-
     df = df.rename(
         columns={
             "Code": "code",
@@ -219,39 +79,9 @@ def api_attendance():
         }
     )
     
-    print(df.columns.tolist())
-    
-    analyzer = AttendanceAnalyzer(
-        df
-    )
+    analyzer = AttendanceAnalyzer(df)
     summary = analyzer.compute_summary()
-
-    return summary.to_dict(
-        orient="records"
-    )
-@app.route("/api/debug")
-def api_debug():
-    if not login_sessions:
-        return {"error": "No active sessions"}, 400
-    
-    uid = list(login_sessions.keys())[0]
-    scraper = login_sessions[uid]["scraper"]
-    try:
-        r = scraper.session.get("https://student.culko.in/frmStudentCourseWiseAttendanceSummary.aspx")
-        with open("portal_source.html", "w", encoding="utf-8") as f:
-            f.write(r.text)
-        return {"msg": f"Dumped for {uid}"}
-    except Exception as e:
-        return {"error": str(e)}, 500
-
-@app.route("/timetable")
-def timetable():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("timetable.html")
+    return summary.to_dict(orient="records")
 
 if __name__ == "__main__":
-
-    app.run(
-        debug=True
-    )
+    app.run(debug=True)

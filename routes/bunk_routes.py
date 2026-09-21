@@ -4,7 +4,7 @@ GET /bunk-calculator      — renders bunk_calculator.html
 GET /api/bunk-calculator  — returns per-subject bunk data using priority.py logic
 """
 
-from flask import Blueprint, session, redirect, url_for, jsonify, render_template
+from flask import Blueprint, session, redirect, url_for, jsonify
 from scrapers.attendance_scraper import AttendanceScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
 from core.sessions import login_sessions
@@ -12,13 +12,6 @@ from core.priority import compute_priority
 import pandas as pd
 
 bunk_bp = Blueprint("bunk", __name__)
-
-
-@bunk_bp.route("/bunk-calculator")
-def bunk_calculator_page():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("bunk_calculator.html")
 
 
 @bunk_bp.route("/api/bunk-calculator")

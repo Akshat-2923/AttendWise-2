@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, redirect, url_for, request, jsonify
+from flask import Blueprint, session, redirect, url_for, request, jsonify
 from datetime import datetime, timedelta
 from services.student_data_service import StudentDataService
 from core.sessions import login_sessions
@@ -6,12 +6,6 @@ from core.sessions import login_sessions
 calendar_bp = Blueprint("calendar", __name__)
 
 CACHE_TTL = timedelta(hours=1)
-
-@calendar_bp.route("/calendar")
-def calendar_view():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("calendar.html")
 
 @calendar_bp.route("/api/calendar/history")
 def api_calendar_history():

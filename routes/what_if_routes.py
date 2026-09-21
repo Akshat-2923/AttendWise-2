@@ -4,7 +4,7 @@ GET /what-if       — renders what_if.html
 GET /api/what-if   — per-subject what-if attend/miss tables
 """
 
-from flask import Blueprint, session, redirect, url_for, jsonify, render_template, request
+from flask import Blueprint, session, redirect, url_for, jsonify, request
 
 from scrapers.attendance_scraper import AttendanceScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
@@ -14,13 +14,6 @@ from core.budget_calculator import BudgetCalculator
 import pandas as pd
 
 what_if_bp = Blueprint("what_if", __name__)
-
-
-@what_if_bp.route("/what-if")
-def what_if_page():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("what_if.html")
 
 
 @what_if_bp.route("/api/what-if", methods=["GET", "POST"])

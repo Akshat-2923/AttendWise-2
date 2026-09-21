@@ -5,7 +5,7 @@ GET /api/smart-plan   — today's classes + per-class verdict + overall daily ve
 """
 
 import datetime
-from flask import Blueprint, session, redirect, url_for, jsonify, render_template
+from flask import Blueprint, session, redirect, url_for, jsonify
 
 from scrapers.attendance_scraper import AttendanceScraper
 from scrapers.timetable_scraper import TimetableScraper
@@ -18,13 +18,6 @@ import pandas as pd
 smart_plan_bp = Blueprint("smart_plan", __name__)
 
 DAY_MAP = {0: "Mon", 1: "Tue", 2: "Wed", 3: "Thu", 4: "Fri", 5: "Sat", 6: "Sun"}
-
-
-@smart_plan_bp.route("/smart-plan")
-def smart_plan_page():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("smart_plan.html")
 
 
 @smart_plan_bp.route("/api/smart-plan")

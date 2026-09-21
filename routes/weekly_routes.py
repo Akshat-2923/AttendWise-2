@@ -4,7 +4,7 @@ GET /weekly       — renders weekly.html
 GET /api/weekly   — combined weekly analytics (workload + risk + upcoming)
 """
 
-from flask import Blueprint, session, redirect, url_for, jsonify, render_template
+from flask import Blueprint, session, redirect, url_for, jsonify
 
 from scrapers.attendance_scraper import AttendanceScraper
 from scrapers.timetable_scraper import TimetableScraper
@@ -14,13 +14,6 @@ from core.weekly_analytics import day_workload, day_risk_map, upcoming_week
 import pandas as pd
 
 weekly_bp = Blueprint("weekly", __name__)
-
-
-@weekly_bp.route("/weekly")
-def weekly_page():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("weekly.html")
 
 
 @weekly_bp.route("/api/weekly")
