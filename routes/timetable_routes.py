@@ -8,9 +8,9 @@ timetable_bp = Blueprint("timetable", __name__)
 @timetable_bp.route("/api/timetable")
 def api_timetable():
 
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-
+    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
+        return {"error": "Unauthorized"}, 401
+    
     uid = session["uid"]
     scraper = login_sessions[uid]["scraper"]
 
@@ -25,8 +25,8 @@ def api_timetable():
 @timetable_bp.route("/api/timetable/today")
 def api_timetable_today():
 
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
+    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
+        return jsonify({"error": "Unauthorized"}), 401
 
     import datetime
 

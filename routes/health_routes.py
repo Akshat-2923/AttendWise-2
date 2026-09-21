@@ -18,9 +18,9 @@ health_bp = Blueprint("health", __name__)
 @health_bp.route("/api/health")
 def api_health():
 
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-
+    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
+        return {"error": "Unauthorized"}, 401
+    
     uid = session["uid"]
     scraper = login_sessions[uid]["scraper"]
 

@@ -39,3 +39,10 @@ class StudentDataService:
                 self.get_timetable()
 
         }
+
+    def get_attendance_history(self):
+        
+        return (
+            self.attendance_scraper
+            .get_attendance_history()
+        )

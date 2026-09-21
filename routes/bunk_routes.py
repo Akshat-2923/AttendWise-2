@@ -23,10 +23,10 @@ def bunk_calculator_page():
 
 @bunk_bp.route("/api/bunk-calculator")
 def api_bunk_calculator():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-
-    uid     = session["uid"]
+    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
+        return {"error": "Unauthorized"}, 401
+    
+    uid = session["uid"]
     scraper = login_sessions[uid]["scraper"]
 
     attendance = AttendanceScraper(scraper.session).get_attendance()
