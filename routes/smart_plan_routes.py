@@ -1,12 +1,5 @@
-"""
-routes/smart_plan_routes.py
-GET /smart-plan       — renders smart_plan.html
-GET /api/smart-plan   — today's classes + per-class verdict + overall daily verdict
-"""
-
 import datetime
-from flask import Blueprint, session, redirect, url_for, jsonify
-
+from fastapi import APIRouter, Request, Response
 from scrapers.attendance_scraper import AttendanceScraper
 from scrapers.timetable_scraper import TimetableScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
@@ -15,17 +8,16 @@ from core.class_verdict import classify_class
 from core.daily_verdict import daily_verdict
 import pandas as pd
 
-smart_plan_bp = Blueprint("smart_plan", __name__)
+smart_plan_bp = APIRouter()
 
 DAY_MAP = {0: "Mon", 1: "Tue", 2: "Wed", 3: "Thu", 4: "Fri", 5: "Sat", 6: "Sun"}
 
-
-@smart_plan_bp.route("/api/smart-plan")
-def api_smart_plan():
-    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
-        return {"error": "Unauthorized"}, 401
+@smart_plan_bp.get("/api/smart-plan")
+def api_smart_plan(request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
     
-    uid = session["uid"]
+    uid = request.session["uid"]
     scraper = login_sessions[uid]["scraper"]
 
     # ── Attendance summary (code -> stats) ──
@@ -104,8 +96,8 @@ def api_smart_plan():
         "reason": "No classes scheduled today."
     }
 
-    return jsonify({
+    return {
         "day":           today_key,
         "classes":       classes,
         "daily_verdict": verdict,
-    })
+    }

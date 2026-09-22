@@ -1,25 +1,18 @@
-"""
-routes/bunk_routes.py
-GET /bunk-calculator      — renders bunk_calculator.html
-GET /api/bunk-calculator  — returns per-subject bunk data using priority.py logic
-"""
-
-from flask import Blueprint, session, redirect, url_for, jsonify
+from fastapi import APIRouter, Request, Response
 from scrapers.attendance_scraper import AttendanceScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
 from core.sessions import login_sessions
 from core.priority import compute_priority
 import pandas as pd
 
-bunk_bp = Blueprint("bunk", __name__)
+bunk_bp = APIRouter()
 
-
-@bunk_bp.route("/api/bunk-calculator")
-def api_bunk_calculator():
-    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
-        return {"error": "Unauthorized"}, 401
+@bunk_bp.get("/api/bunk-calculator")
+def api_bunk_calculator(request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
     
-    uid = session["uid"]
+    uid = request.session["uid"]
     scraper = login_sessions[uid]["scraper"]
 
     attendance = AttendanceScraper(scraper.session).get_attendance()
@@ -60,4 +53,4 @@ def api_bunk_calculator():
     order = {"Must Attend": 0, "Attend Carefully": 1, "Bunkable": 2, "Not Started": 3}
     results.sort(key=lambda x: order.get(x["priority"], 99))
 
-    return jsonify(results)
+    return results

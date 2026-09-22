@@ -25,7 +25,7 @@ AttendWise v2 has been completely rebuilt with a modern decoupled architecture.
 |---|---|---|
 | **Frontend** | Next.js (App Router), React, TypeScript | Interactive, component-driven UI |
 | **Styling** | Tailwind CSS | Sleek, dark-mode responsive design |
-| **Backend API** | Flask (Python) | Session management & REST endpoints |
+| **Backend API** | FastAPI (Python) | Session management & REST endpoints |
 | **Data Engine** | Pandas & NumPy | High-performance vectorized math |
 | **Scraping** | Requests & BeautifulSoup4 | Live ERP portal data extraction |
 
@@ -42,9 +42,9 @@ AttendWise-V2/
 │   └── src/types/            # TypeScript interfaces
 ├── analytics/                # Pandas-based attendance crunching
 ├── core/                     # Math models, budgeting, and calendar logic
-├── routes/                   # Flask REST API Blueprints
+├── routes/                   # FastAPI REST API routers
 ├── scrapers/                 # UIMS portal web scrapers
-└── app.py                    # Flask application entry point
+└── main.py                   # FastAPI application entry point
 ```
 
 ---
@@ -56,7 +56,7 @@ AttendWise-V2/
 - **Python** (3.11+) & **pip**
 - A valid Chandigarh University student ERP account
 
-### 1. Setup the Backend (Flask)
+### 1. Setup the Backend (FastAPI)
 
 ```bash
 # Clone the repository
@@ -69,13 +69,13 @@ python -m venv venv
 # macOS/Linux: source venv/bin/activate
 
 # Install dependencies
-pip install flask pandas numpy requests beautifulsoup4 python-dotenv
+pip install -r requirements.txt
 
 # Generate a secret key and create .env
 python -c "import secrets; print(f'SECRET_KEY={secrets.token_hex(32)}')" > .env
 
-# Run the backend (runs on http://127.0.0.1:5000)
-python app.py
+# Run the FastAPI development server (starts on port 5000)
+uvicorn main:app --host 0.0.0.0 --port 5000 --reload
 ```
 
 ### 2. Setup the Frontend (Next.js)
@@ -114,7 +114,7 @@ MID_SEM_DAYS = { "2026-02-17", "2026-02-18" }
 ## 🔒 Security & Privacy
 
 - **No Credential Storage**: Your passwords are **never** stored in a database. They are proxied securely to the CU ERP in real-time, and your authenticated session lives strictly in server memory for the duration of your usage.
-- **Environment Variables**: Sensitive Flask signing keys are loaded from `.env` and excluded from version control.
+- **Environment Variables**: Sensitive API signing keys are loaded from `.env` and excluded from version control.
 
 ---
 

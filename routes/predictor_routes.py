@@ -1,11 +1,4 @@
-"""
-routes/predictor_routes.py
-GET /predictor       — renders predictor.html
-GET /api/predictor   — per-subject calendar-aware attendance forecasts
-"""
-
-from flask import Blueprint, session, redirect, url_for, jsonify
-
+from fastapi import APIRouter, Request, Response
 from scrapers.attendance_scraper import AttendanceScraper
 from scrapers.timetable_scraper import TimetableScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
@@ -13,15 +6,14 @@ from core.sessions import login_sessions
 from core.predictor import forecast_all
 import pandas as pd
 
-predictor_bp = Blueprint("predictor", __name__)
+predictor_bp = APIRouter()
 
-
-@predictor_bp.route("/api/predictor")
-def api_predictor():
-    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
-        return {"error": "Unauthorized"}, 401
+@predictor_bp.get("/api/predictor")
+def api_predictor(request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
     
-    uid = session["uid"]
+    uid = request.session["uid"]
     scraper = login_sessions[uid]["scraper"]
 
     # Attendance summary
@@ -41,4 +33,4 @@ def api_predictor():
     # Calendar-aware forecasts
     forecasts = forecast_all(records, timetable, weeks=8)
 
-    return jsonify(forecasts)
+    return forecasts

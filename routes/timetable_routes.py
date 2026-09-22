@@ -1,17 +1,16 @@
+from fastapi import APIRouter, Request, Response
 from core.sessions import login_sessions
-from flask import Blueprint, session, redirect, url_for, jsonify
 from scrapers.timetable_scraper import TimetableScraper
+import datetime
 
-timetable_bp = Blueprint("timetable", __name__)
+timetable_bp = APIRouter()
 
-
-@timetable_bp.route("/api/timetable")
-def api_timetable():
-
-    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
-        return {"error": "Unauthorized"}, 401
+@timetable_bp.get("/api/timetable")
+def api_timetable(request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
     
-    uid = session["uid"]
+    uid = request.session["uid"]
     scraper = login_sessions[uid]["scraper"]
 
     timetable = (
@@ -19,18 +18,14 @@ def api_timetable():
         .get_timetable()
     )
 
-    return jsonify(timetable)
+    return timetable
 
+@timetable_bp.get("/api/timetable/today")
+def api_timetable_today(request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
 
-@timetable_bp.route("/api/timetable/today")
-def api_timetable_today():
-
-    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    import datetime
-
-    uid = session["uid"]
+    uid = request.session["uid"]
     scraper = login_sessions[uid]["scraper"]
 
     timetable = (
@@ -45,7 +40,7 @@ def api_timetable_today():
 
     today = day_map[datetime.datetime.now().weekday()]
 
-    return jsonify({
+    return {
         "day": today,
         "slots": timetable.get(today, [])
-    })
+    }

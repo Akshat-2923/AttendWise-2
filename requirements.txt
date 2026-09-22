@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-multipart
+itsdangerous
+requests
+beautifulsoup4
+pandas
+numpy
+python-dotenv

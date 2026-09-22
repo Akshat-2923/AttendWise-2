@@ -1,24 +1,17 @@
-"""
-routes/subject_routes.py
-GET /api/subject/<code>  — per-subject detail for Subject Detail Page
-GET /subject             — renders subject.html (query param: ?code=25CSH-114)
-"""
-
-from flask import Blueprint, session, redirect, url_for, jsonify
+from fastapi import APIRouter, Request, Response
 from scrapers.attendance_scraper import AttendanceScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
 from core.sessions import login_sessions
 import pandas as pd
 
-subject_bp = Blueprint("subject", __name__)
+subject_bp = APIRouter()
 
-
-@subject_bp.route("/api/subject/<code>")
-def api_subject(code):
-    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
-        return {"error": "Unauthorized"}, 401
+@subject_bp.get("/api/subject/{code}")
+def api_subject(code: str, request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
     
-    uid = session["uid"]
+    uid = request.session["uid"]
     scraper = login_sessions[uid]["scraper"]
 
     attendance = AttendanceScraper(scraper.session).get_attendance()
@@ -34,11 +27,11 @@ def api_subject(code):
 
     row = summary[summary["code"] == code]
     if row.empty:
-        return jsonify({"error": "Subject not found"}), 404
+        return Response(content='{"error": "Subject not found"}', media_type="application/json", status_code=404)
 
     r = row.iloc[0]
 
-    return jsonify({
+    return {
         "code":             r["code"],
         "subject":          r["subject"],
         "conducted":        int(r["conducted"]),
@@ -49,5 +42,5 @@ def api_subject(code):
         "status":           r["status"],
         "medical_leave":    int(r.get("medical_leave", 0)),
         "duty_leave":       int(r.get("duty_leave", 0)),
-        "faculty":          "",   # not in attendance scraper; timetable can enrich this later
-    })
+        "faculty":          "",   
+    }

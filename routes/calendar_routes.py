@@ -1,22 +1,21 @@
-from flask import Blueprint, session, redirect, url_for, request, jsonify
+from fastapi import APIRouter, Request, Response
 from datetime import datetime, timedelta
 from services.student_data_service import StudentDataService
 from core.sessions import login_sessions
 
-calendar_bp = Blueprint("calendar", __name__)
+calendar_bp = APIRouter()
 
 CACHE_TTL = timedelta(hours=1)
 
-@calendar_bp.route("/api/calendar/history")
-def api_calendar_history():
-    if not session.get("logged_in"):
-        return jsonify({"error": "Unauthorized"}), 401
+@calendar_bp.get("/api/calendar/history")
+def api_calendar_history(request: Request, force_refresh: bool = False):
+    if not request.session.get("logged_in"):
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
 
-    uid = session.get("uid")
-    if uid not in login_sessions:
-        return jsonify({"error": "Session expired", "redirect": "/login"}), 401
+    uid = request.session.get("uid")
+    if not uid or uid not in login_sessions:
+        return Response(content='{"error": "Session expired", "redirect": "/login"}', media_type="application/json", status_code=401)
     
-    force_refresh = request.args.get("force_refresh", "false").lower() == "true"
     user_session_data = login_sessions[uid]
     
     # Check if we have valid cached history server-side
@@ -24,10 +23,10 @@ def api_calendar_history():
     if not force_refresh and cached_history:
         # Check TTL
         if datetime.now() - cached_history["timestamp"] < CACHE_TTL:
-            return jsonify({
+            return {
                 "data": cached_history["data"],
                 "last_sync": cached_history["last_sync"]
-            })
+            }
 
     scraper = user_session_data["scraper"]
     
@@ -43,9 +42,9 @@ def api_calendar_history():
             "last_sync": sync_time
         }
         
-        return jsonify({
+        return {
             "data": history,
             "last_sync": sync_time
-        })
+        }
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return Response(content=f'{{"error": "{str(e)}"}}', media_type="application/json", status_code=500)

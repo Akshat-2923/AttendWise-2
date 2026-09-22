@@ -1,11 +1,4 @@
-"""
-routes/weekly_routes.py
-GET /weekly       — renders weekly.html
-GET /api/weekly   — combined weekly analytics (workload + risk + upcoming)
-"""
-
-from flask import Blueprint, session, redirect, url_for, jsonify
-
+from fastapi import APIRouter, Request, Response
 from scrapers.attendance_scraper import AttendanceScraper
 from scrapers.timetable_scraper import TimetableScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
@@ -13,24 +6,23 @@ from core.sessions import login_sessions
 from core.weekly_analytics import day_workload, day_risk_map, upcoming_week
 import pandas as pd
 
-weekly_bp = Blueprint("weekly", __name__)
+weekly_bp = APIRouter()
 
-
-@weekly_bp.route("/api/weekly")
-def api_weekly():
-    if not session.get("logged_in") or "uid" not in session or session["uid"] not in login_sessions:
-        return {"error": "Unauthorized"}, 401
+@weekly_bp.get("/api/weekly")
+def api_weekly(request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
     
-    uid = session["uid"]
+    uid = request.session["uid"]
     scraper = login_sessions[uid]["scraper"]
 
     # Attendance summary
     try:
         attendance = AttendanceScraper(scraper.session).get_attendance()
     except Exception:
-        session.clear()
+        request.session.clear()
         login_sessions.pop(uid, None)
-        return {"error": "Session expired. Please log in again.", "redirect": "/login"}, 401
+        return Response(content='{"error": "Session expired. Please log in again.", "redirect": "/login"}', media_type="application/json", status_code=401)
 
     df = pd.DataFrame(attendance).rename(columns={
         "Code":       "code",
@@ -45,8 +37,8 @@ def api_weekly():
     timetable = TimetableScraper(scraper.session).get_timetable()
 
     # Analytics
-    return jsonify({
+    return {
         "workload":  day_workload(timetable),
         "risk_map":  day_risk_map(timetable, records),
         "upcoming":  upcoming_week(timetable, records),
-    })
+    }
