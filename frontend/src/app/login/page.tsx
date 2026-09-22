@@ -153,7 +153,7 @@ export default function LoginPage() {
                 <input
                   type="text"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-4 text-white focus:outline-none focus:border-white/30 transition-colors placeholder:text-white/40 text-center uppercase tracking-widest shadow-inner"
+                  className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-4 text-white focus:outline-none focus:border-white/30 transition-colors placeholder:text-white/40 text-center tracking-widest shadow-inner"
                   placeholder="Enter Captcha"
                   value={captcha}
                   onChange={(e) => setCaptcha(e.target.value)}
