@@ -28,10 +28,16 @@ load_dotenv()
 
 app = FastAPI(title="AttendWise API")
 
-# Allow cross-origin requests from local Next.js environment
+# Determine frontend URL for CORS (allow FRONTEND_URL from env, plus local dev)
+frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+allowed_origins = [frontend_url, "http://localhost:3000", "http://127.0.0.1:3000"]
+# Ensure unique origins in case FRONTEND_URL is localhost
+allowed_origins = list(set(allowed_origins))
+
+# Allow cross-origin requests from frontend environment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -51,7 +57,9 @@ app.add_middleware(
     SessionMiddleware,
     secret_key=_secret,
     session_cookie="session",
-    max_age=86400 * 30  # 30 days
+    max_age=86400 * 30,  # 30 days
+    same_site="none" if frontend_url.startswith("https") else "lax",
+    https_only=frontend_url.startswith("https")
 )
 
 # --- Register API Routers ---
