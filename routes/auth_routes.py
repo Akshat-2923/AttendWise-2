@@ -23,6 +23,7 @@ def captcha(uid: str = None):
     if not uid:
         return Response(content='{"error": "Missing uid"}', media_type="application/json", status_code=400)
 
+    uid = uid.upper()
     scraper = LoginScraper()
     image_bytes = scraper.start_login(uid)
     login_sessions[uid] = {"scraper": scraper}
@@ -31,9 +32,9 @@ def captcha(uid: str = None):
 
 @auth_bp.post("/api/auth/login")
 def login(data: LoginRequest, request: Request):
-    uid = data.uid
+    uid = data.uid.upper()
     password = data.password
-    captcha = data.captcha
+    captcha = data.captcha.upper() # Captchas are typically uppercase
 
     if not all([uid, password, captcha]):
         return Response(content='{"error": "Missing credentials"}', media_type="application/json", status_code=400)
@@ -44,10 +45,16 @@ def login(data: LoginRequest, request: Request):
     scraper = login_sessions[uid]["scraper"]
     
     try:
-        scraper.complete_login(uid, password, captcha)
+        resp = scraper.complete_login(uid, password, captcha)
+        
+        # Check if CU ERP returned an error message in the login response
+        if "Invalid" in resp.text or "Incorrect" in resp.text:
+             return Response(content='{"error": "Invalid User ID, Password, or Captcha"}', media_type="application/json", status_code=401)
         
         # Verify login by hitting home page
         home = scraper.session.get("https://student.culko.in/StudentHome.aspx")
+        if "Login" in home.url or "Login" in home.text:
+             return Response(content='{"error": "Login failed (Session not established)"}', media_type="application/json", status_code=401)
         
         # Set standard session variables
         request.session["uid"] = uid
