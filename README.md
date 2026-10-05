@@ -49,7 +49,7 @@ AttendWise-V2/
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting Started (Local Development)
 
 ### Prerequisites
 - **Node.js** (v18+) & **npm**
@@ -93,6 +93,30 @@ npm run dev
 ```
 
 The app will now be live at **http://localhost:3000**!
+
+---
+
+## ☁️ Production Deployment (Vercel + Render)
+
+AttendWise v2 is designed to be easily deployed for free using **Vercel** (Frontend) and **Render** (Backend).
+
+### 1. Deploy the Backend (Render)
+1. Create a **Web Service** on Render and connect your GitHub repository.
+2. **Build Command:** `pip install -r requirements.txt`
+3. **Start Command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
+4. **Environment Variables:**
+   - `SECRET_KEY`: A random hex string (e.g., generate one with `openssl rand -hex 32`).
+   - `FRONTEND_URL`: Your Vercel frontend URL (e.g., `https://attend-wise-2-orm7jf796-akshat-4450.vercel.app`). *This is critical for CORS and secure cross-origin session cookies.*
+
+### 2. Deploy the Frontend (Vercel)
+1. Import the repository into **Vercel**.
+2. Set the **Framework Preset** to Next.js.
+3. Set the **Root Directory** to `frontend`.
+4. **Environment Variables:**
+   - `NEXT_PUBLIC_API_URL`: Your Render backend URL (e.g., `https://attendwise-2-di1p.onrender.com`). *Ensure there is no trailing slash.*
+
+### 💡 Tip: Keep the Free Backend Awake
+Render's free tier spins down backends after 15 minutes of inactivity. To prevent users from waiting ~50 seconds for the backend to boot up during their first login, set up a free uptime monitor (like [UptimeRobot](https://uptimerobot.com/)) to ping your backend's `/api/auth/status` endpoint every 14 minutes.
 
 ---
 
