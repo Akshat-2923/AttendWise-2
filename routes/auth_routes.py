@@ -53,7 +53,7 @@ def login(data: LoginRequest, request: Request):
         
         # Verify login by hitting home page
         home = scraper.session.get("https://student.culko.in/StudentHome.aspx")
-        if "Login" in home.url or "Login" in home.text:
+        if "Login" in home.url or "Default" in home.url:
              return Response(content='{"error": "Login failed (Session not established)"}', media_type="application/json", status_code=401)
         
         # Set standard session variables
