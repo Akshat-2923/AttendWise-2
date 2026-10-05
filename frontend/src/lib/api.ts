@@ -16,11 +16,10 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
   });
 
   if (!response.ok) {
-    if (response.status === 401) {
-      // Handle unauthorized specifically
-      throw new Error('Unauthorized');
-    }
     const data = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      throw new Error(data.error || 'Unauthorized');
+    }
     throw new Error(data.error || 'API request failed');
   }
 
