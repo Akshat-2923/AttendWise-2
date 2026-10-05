@@ -26,7 +26,8 @@ export default function LoginPage() {
 
   const fetchCaptcha = (uidValue: string) => {
     if (!uidValue) return;
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const API_URL = RAW_API_URL.replace(/\/+$/, ""); // Strip trailing slashes
     setCaptchaUrl(`${API_URL}/api/auth/captcha?uid=${encodeURIComponent(uidValue)}&t=${Date.now()}`);
     setError("");
   };
