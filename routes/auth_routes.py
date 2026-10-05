@@ -23,7 +23,6 @@ def captcha(uid: str = None):
     if not uid:
         return Response(content='{"error": "Missing uid"}', media_type="application/json", status_code=400)
 
-    uid = uid.upper()
     scraper = LoginScraper()
     image_bytes = scraper.start_login(uid)
     login_sessions[uid] = {"scraper": scraper}
@@ -32,9 +31,9 @@ def captcha(uid: str = None):
 
 @auth_bp.post("/api/auth/login")
 def login(data: LoginRequest, request: Request):
-    uid = data.uid.upper()
+    uid = data.uid
     password = data.password
-    captcha = data.captcha.upper() # Captchas are typically uppercase
+    captcha = data.captcha
 
     if not all([uid, password, captcha]):
         return Response(content='{"error": "Missing credentials"}', media_type="application/json", status_code=400)
