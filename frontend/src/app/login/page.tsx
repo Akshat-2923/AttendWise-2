@@ -54,7 +54,9 @@ export default function LoginPage() {
       });
       router.push("/dashboard");
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      const msg = err.message || "Login failed";
+      setError(msg);
+      alert("Login Error: " + msg);
       // Refresh captcha on failure
       fetchCaptcha(uid);
       setCaptcha("");
