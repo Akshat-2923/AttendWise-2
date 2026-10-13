@@ -10,8 +10,8 @@ If any logic module needs a hardcoded date, it belongs here, not there.
 from datetime import datetime
 
 # Semester boundaries
-SEMESTER_START = datetime(2026, 1, 5)
-SEMESTER_END   = datetime(2026, 5, 5)
+SEMESTER_START = datetime(2026, 7, 15)
+SEMESTER_END   = datetime(2026, 12, 24)
 
 # Fixed holidays (no classes)
 HOLIDAYS = {
@@ -21,7 +21,13 @@ HOLIDAYS = {
     "2026-03-20",  # Eid ul Fitr
     "2026-03-27",  # Ram Navmi
     "2026-04-14",  # Dr. Ambedkar Jayanti
-    "2026-05-27",  # Bakrid (outside range, safety)
+    "2026-05-27",  # Bakrid
+    "2026-08-15",  # Independence Day
+    "2026-10-02",  # Gandhi Jayanti
+    "2026-10-20",  # Dussehra
+    "2026-11-08",  # Diwali
+    "2026-11-24",  # Guru Nanak Jayanti
+    "2026-12-25",  # Christmas
 }
 
 # Saturdays that ARE teaching days, mapped to which weekday's timetable to follow

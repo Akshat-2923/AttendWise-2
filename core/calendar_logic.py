@@ -51,8 +51,17 @@ def is_teaching_day(date_obj: datetime) -> bool:
       - not a mid-sem block day
       - AND (Mon-Fri OR an approved working Saturday)
     """
-    if date_obj < SEMESTER_START or date_obj > SEMESTER_END:
+    # Active semester boundary check
+    if SEMESTER_START <= datetime.now() <= SEMESTER_END:
+        if date_obj < SEMESTER_START or date_obj > SEMESTER_END:
+            return False
+    elif date_obj < SEMESTER_START:
         return False
+    elif SEMESTER_END < datetime.now():
+        # Fallback if config has not yet been updated for a new semester: allow 120-day window
+        if date_obj > datetime.now() + timedelta(days=120):
+            return False
+
     if is_sunday(date_obj):
         return False
     if is_holiday(date_obj):

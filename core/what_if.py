@@ -8,8 +8,11 @@ and compute_priority()'s bunk_budget — no parallel recomputation.
 """
 
 import math
+from datetime import datetime, timedelta
+import re
 from core.budget_calculator import BudgetCalculator
 from core.priority import compute_priority
+from core.calendar_logic import get_effective_timetable_day
 
 
 def _status_label(percent: float, bunk_budget: int) -> str:
@@ -111,3 +114,105 @@ def _build_result(
         "recovery_needed": recovery,
         "status":          status,
     }
+
+
+def _time_to_min(t: str) -> int:
+    """Parse time slot string into minutes for time-of-day comparison."""
+    m = re.match(r"(\d+):(\d+)", t or "")
+    if not m:
+        return 0
+    h, mi = int(m.group(1)), int(m.group(2))
+    if "PM" in t and h != 12:
+        h += 12
+    if "AM" in t and h == 12:
+        h = 0
+    return h * 60 + mi
+
+
+def predict_target_date(
+    subject_code: str,
+    classes_needed: int,
+    timetable_data: dict | None,
+    from_date: datetime | None = None,
+    max_days: int = 120,
+) -> dict:
+    """
+    Simulate future teaching days using timetable_data and the academic calendar
+    to determine the calendar date on which the student will have attended `classes_needed` classes.
+    """
+    if classes_needed <= 0:
+        return {
+            "date": None,
+            "formatted": "Target already met",
+            "days_away": 0,
+            "classes_found": 0,
+            "achievable": True,
+        }
+
+    if not timetable_data:
+        return {
+            "date": None,
+            "formatted": None,
+            "days_away": None,
+            "classes_found": 0,
+            "achievable": True,
+        }
+
+    from_date = from_date or datetime.now()
+    now_dt = datetime.now()
+    current = from_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_limit = current + timedelta(days=max_days)
+
+    day_full_map = {
+        "mon": "Mon", "tue": "Tue", "wed": "Wed",
+        "thu": "Thu", "fri": "Fri", "sat": "Sat", "sun": "Sun",
+    }
+
+    norm_target = str(subject_code).strip().upper()
+    norm_target_clean = norm_target.replace("-", "")
+
+    attended_counter = 0
+    target_date = None
+
+    while current <= end_limit:
+        effective_day = get_effective_timetable_day(current)
+        if effective_day:
+            day_key = day_full_map.get(effective_day)
+            slots = timetable_data.get(day_key, [])
+            for slot in slots:
+                slot_code = str(slot.get("subject_code") or "").strip().upper()
+                slot_code_clean = slot_code.replace("-", "")
+
+                if slot_code == norm_target or (slot_code_clean and slot_code_clean == norm_target_clean):
+                    # If this class is today, verify if it has already passed
+                    if current.date() == now_dt.date():
+                        slot_min = _time_to_min(slot.get("time", ""))
+                        now_min = now_dt.hour * 60 + now_dt.minute
+                        if slot_min > 0 and slot_min < now_min:
+                            continue
+
+                    attended_counter += 1
+                    if attended_counter >= classes_needed:
+                        target_date = current
+                        break
+            if target_date:
+                break
+        current += timedelta(days=1)
+
+    if target_date:
+        days_away = (target_date.date() - now_dt.date()).days
+        return {
+            "date": target_date.strftime("%Y-%m-%d"),
+            "formatted": target_date.strftime("%a, %d %b %Y"),
+            "days_away": days_away,
+            "classes_found": attended_counter,
+            "achievable": True,
+        }
+    else:
+        return {
+            "date": None,
+            "formatted": "Not achievable this semester",
+            "days_away": None,
+            "classes_found": attended_counter,
+            "achievable": False,
+        }
