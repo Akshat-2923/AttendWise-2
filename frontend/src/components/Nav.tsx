@@ -22,7 +22,7 @@ export default function Nav() {
     { name: "Timetable", href: "/timetable" },
     { name: "Calendar", href: "/calendar" },
     { name: "What-If", href: "/what-if" },
-    { name: "Weekly", href: "/weekly" },
+    { name: "Monthly Planner", href: "/weekly" },
     { name: "Today's Plan", href: "/smart-plan" },
   ];
 
