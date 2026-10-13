@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Request, Response
 from scrapers.attendance_scraper import AttendanceScraper
+from scrapers.timetable_scraper import TimetableScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
 from core.sessions import login_sessions
+from core.what_if import predict_target_date
 import pandas as pd
 
 subject_bp = APIRouter()
@@ -31,6 +33,20 @@ def api_subject(code: str, request: Request):
 
     r = row.iloc[0]
 
+    timetable = None
+    try:
+        user_sess = login_sessions[uid]
+        if "timetable" in user_sess:
+            timetable = user_sess["timetable"]
+        else:
+            timetable = TimetableScraper(scraper.session).get_timetable()
+            user_sess["timetable"] = timetable
+    except Exception:
+        pass
+
+    recovery_needed = int(r["recovery_classes"])
+    pred = predict_target_date(code, recovery_needed, timetable) if (timetable and recovery_needed > 0) else None
+
     return {
         "code":             r["code"],
         "subject":          r["subject"],
@@ -38,7 +54,9 @@ def api_subject(code: str, request: Request):
         "attended":         int(r["attended"]),
         "percentage":       float(r["percentage"]),
         "bunk_budget":      int(r["bunk_budget"]),
-        "recovery_classes": int(r["recovery_classes"]),
+        "recovery_classes": recovery_needed,
+        "recovery_date":    pred.get("formatted") if pred else None,
+        "recovery_days_away": pred.get("days_away") if pred else None,
         "status":           r["status"],
         "medical_leave":    int(r.get("medical_leave", 0)),
         "duty_leave":       int(r.get("duty_leave", 0)),

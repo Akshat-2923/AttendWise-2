@@ -146,3 +146,70 @@ def api_what_if_get(request: Request):
         })
 
     return results
+
+
+class RecoveryDateRequest(BaseModel):
+    code: str
+    classes_needed: int
+
+
+@what_if_bp.get("/api/what-if/dates")
+def api_what_if_dates(code: str, request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
+    
+    uid = request.session["uid"]
+    scraper = login_sessions[uid]["scraper"]
+
+    timetable = None
+    try:
+        user_sess = login_sessions[uid]
+        if "timetable" in user_sess:
+            timetable = user_sess["timetable"]
+        else:
+            timetable = TimetableScraper(scraper.session).get_timetable()
+            user_sess["timetable"] = timetable
+    except Exception as e:
+        print(f"Warning: Failed to fetch timetable: {e}")
+
+    dates_map = {}
+    if timetable:
+        for n in range(1, 51):
+            dates_map[n] = predict_target_date(
+                subject_code=code,
+                classes_needed=n,
+                timetable_data=timetable,
+            )
+
+    return {
+        "code": code,
+        "dates": dates_map,
+    }
+
+
+@what_if_bp.post("/api/what-if/recovery-date")
+def api_what_if_recovery_date(data: RecoveryDateRequest, request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
+    
+    uid = request.session["uid"]
+    scraper = login_sessions[uid]["scraper"]
+
+    timetable = None
+    try:
+        user_sess = login_sessions[uid]
+        if "timetable" in user_sess:
+            timetable = user_sess["timetable"]
+        else:
+            timetable = TimetableScraper(scraper.session).get_timetable()
+            user_sess["timetable"] = timetable
+    except Exception as e:
+        print(f"Warning: Failed to fetch timetable: {e}")
+
+    pred = predict_target_date(
+        subject_code=data.code,
+        classes_needed=data.classes_needed,
+        timetable_data=timetable,
+    )
+
+    return pred

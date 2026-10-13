@@ -10,6 +10,10 @@ interface PredictorResult {
   new_percentage: number;
   status: string;
   verdict: string;
+  recovery_classes?: number;
+  recovery_date?: string | null;
+  days_away?: number | null;
+  bunk_budget?: number;
 }
 
 export default function PredictorPage() {
@@ -152,6 +156,34 @@ export default function PredictorPage() {
               }`}>
                 {result.verdict}
               </div>
+            </div>
+          </div>
+        )}
+
+        {result && result.recovery_classes && result.recovery_classes > 0 && (
+          <div className="mt-4 p-5 rounded-xl border border-danger/30 bg-danger/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-danger font-mono">
+                Recovery Target
+              </div>
+              <div className="text-[15px] font-semibold text-text">
+                You need to attend <span className="text-danger font-mono font-bold">+{result.recovery_classes}</span> consecutive classes to recover to 75%.
+              </div>
+              {result.recovery_date && (
+                <div className="text-[13px] text-muted flex items-center gap-2 mt-0.5">
+                  <span>Estimated Recovery Date:</span>
+                  <strong className="text-text">{result.recovery_date}</strong>
+                  {result.days_away !== null && result.days_away !== undefined && (
+                    <span className="text-accent font-medium">
+                      ({result.days_away} {result.days_away === 1 ? 'day' : 'days'} away)
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="text-center sm:text-right font-mono">
+              <div className="text-[28px] font-bold text-danger leading-none">+{result.recovery_classes}</div>
+              <div className="text-[11px] text-muted uppercase mt-1">Classes</div>
             </div>
           </div>
         )}

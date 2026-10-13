@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Request, Response
 from scrapers.attendance_scraper import AttendanceScraper
+from scrapers.timetable_scraper import TimetableScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
 from core.sessions import login_sessions
 from core.priority import compute_priority
+from core.what_if import predict_target_date
 import pandas as pd
 
 bunk_bp = APIRouter()
@@ -16,6 +18,18 @@ def api_bunk_calculator(request: Request):
     scraper = login_sessions[uid]["scraper"]
 
     attendance = AttendanceScraper(scraper.session).get_attendance()
+
+    # Timetable for recovery date calculation
+    timetable = None
+    try:
+        user_sess = login_sessions[uid]
+        if "timetable" in user_sess:
+            timetable = user_sess["timetable"]
+        else:
+            timetable = TimetableScraper(scraper.session).get_timetable()
+            user_sess["timetable"] = timetable
+    except Exception:
+        pass
 
     df = pd.DataFrame(attendance).rename(columns={
         "Code":       "code",
@@ -36,6 +50,8 @@ def api_bunk_calculator(request: Request):
         is_lab  = row.get("type", "") == "P"
 
         p = compute_priority(attended, conducted, is_lab=is_lab)
+        rec_classes = int(row["recovery_classes"])
+        pred = predict_target_date(code, rec_classes, timetable) if (timetable and rec_classes > 0) else None
 
         results.append({
             "code":             code,
@@ -44,7 +60,9 @@ def api_bunk_calculator(request: Request):
             "conducted":        conducted,
             "percentage":       float(row["percentage"]),
             "bunk_budget":      p["bunk_budget"],
-            "recovery_classes": int(row["recovery_classes"]),
+            "recovery_classes": rec_classes,
+            "recovery_date":    pred.get("formatted") if pred else None,
+            "recovery_days_away": pred.get("days_away") if pred else None,
             "priority":         p["priority"],
             "status":           row["status"],
         })

@@ -1078,7 +1078,11 @@ type CalendarCell =
                         </div>
 
                         <div className="text-[10.5px] text-muted flex justify-between border-t border-border/40 pt-1.5 mt-0.5">
-                          <span>Safe bunks left: <strong>{p.bunk_budget}</strong></span>
+                          {p.recovery_classes > 0 ? (
+                            <span className="text-danger font-medium">Need <strong>+{p.recovery_classes}</strong> to recover</span>
+                          ) : (
+                            <span>Safe bunks left: <strong>{p.bunk_budget}</strong></span>
+                          )}
                           {p.planned_skips > 0 && (
                             <span className="text-warning">
                               {p.planned_skips} planned {p.planned_skips === 1 ? "skip" : "skips"}

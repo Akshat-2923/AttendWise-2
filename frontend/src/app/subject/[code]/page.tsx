@@ -87,8 +87,14 @@ export default function SubjectPage() {
               </>
             ) : (
               <>
-                <div className="text-[11px] font-semibold tracking-wider uppercase text-muted mb-2">Recovery Needed</div>
-                <div className="text-[28px] font-bold font-mono text-danger">-{data.recovery_classes} classes</div>
+                <div className="text-[11px] font-semibold tracking-wider uppercase text-muted mb-1">Recovery Needed</div>
+                <div className="text-[28px] font-bold font-mono text-danger">+{data.recovery_classes} classes</div>
+                {data.recovery_date && (
+                  <div className="text-[12px] text-muted mt-1 truncate" title={data.recovery_date}>
+                    Estimated by: <strong className="text-text">{data.recovery_date}</strong>
+                    {data.recovery_days_away !== null && data.recovery_days_away !== undefined ? ` (${data.recovery_days_away}d)` : ''}
+                  </div>
+                )}
               </>
             )}
           </div>

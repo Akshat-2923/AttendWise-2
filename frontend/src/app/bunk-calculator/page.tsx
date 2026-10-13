@@ -12,6 +12,8 @@ interface BunkSubject {
   percentage: number;
   bunk_budget: number;
   recovery_classes: number;
+  recovery_date?: string | null;
+  recovery_days_away?: number | null;
   priority: string;
   status: string;
 }
@@ -104,10 +106,23 @@ export default function BunkCalculatorPage() {
                       <span className="font-bold font-mono text-success">+{sub.bunk_budget}</span>
                     </div>
                   ) : (
-                    <div className="flex justify-between items-center text-[13px]">
-                      <span className="text-muted">Classes to Recover</span>
-                      <span className="font-bold font-mono text-danger">-{sub.recovery_classes}</span>
-                    </div>
+                    <>
+                      <div className="flex justify-between items-center text-[13px]">
+                        <span className="text-muted">Classes to Recover</span>
+                        <span className="font-bold font-mono text-danger">+{sub.recovery_classes}</span>
+                      </div>
+                      {sub.recovery_date && (
+                        <div className="flex justify-between items-center text-[12px]">
+                          <span className="text-muted">Recovery Date</span>
+                          <span className="font-mono text-accent truncate" title={sub.recovery_date}>
+                            {sub.recovery_date}
+                            {sub.recovery_days_away !== null && sub.recovery_days_away !== undefined
+                              ? ` (${sub.recovery_days_away}d)`
+                              : ''}
+                          </span>
+                        </div>
+                      )}
+                    </>
                   )}
                   <div className="flex justify-between items-center text-[13px]">
                     <span className="text-muted">Attended / Conducted</span>

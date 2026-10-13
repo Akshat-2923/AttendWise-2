@@ -9,4 +9,6 @@ export interface SubjectAttendance {
   status: string;
   medical_leave?: number;
   duty_leave?: number;
+  recovery_date?: string;
+  recovery_days_away?: number;
 }
