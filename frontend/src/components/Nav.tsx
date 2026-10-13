@@ -23,7 +23,6 @@ export default function Nav() {
     { name: "Calendar", href: "/calendar" },
     { name: "What-If", href: "/what-if" },
     { name: "Monthly Planner", href: "/weekly" },
-    { name: "Today's Plan", href: "/smart-plan" },
   ];
 
   return (

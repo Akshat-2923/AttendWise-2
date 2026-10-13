@@ -9,7 +9,7 @@ from scrapers.timetable_scraper import TimetableScraper
 from analytics.attendance_analyzer import AttendanceAnalyzer
 from core.sessions import login_sessions
 from core.weekly_analytics import day_workload, day_risk_map, upcoming_week
-from core.monthly_planner import get_month_calendar_data, compute_plan_projections
+from core.monthly_planner import get_month_calendar_data, compute_plan_projections, _match_code
 from core.calendar_config import SEMESTER_START, SEMESTER_END, HOLIDAYS, WORKING_SATURDAYS, MID_SEM_DAYS
 from services.plan_service import PlanService
 
@@ -120,6 +120,68 @@ def api_weekly_month(request: Request, year: Optional[int] = None, month: Option
         "calendar": calendar_data,
         "saved_plan": user_plan,
         "projections": projections,
+    }
+
+
+@weekly_bp.get("/api/weekly/today")
+def api_weekly_today(request: Request):
+    if not request.session.get("logged_in") or "uid" not in request.session or request.session["uid"] not in login_sessions:
+        return Response(content='{"error": "Unauthorized"}', media_type="application/json", status_code=401)
+
+    uid = request.session["uid"]
+    scraper = login_sessions[uid]["scraper"]
+
+    now = datetime.now()
+    today_str = now.strftime("%Y-%m-%d")
+
+    try:
+        attendance = AttendanceScraper(scraper.session).get_attendance()
+        df = pd.DataFrame(attendance).rename(columns={
+            "Code":       "code",
+            "Total_Delv": "total",
+            "Total_Attd": "attended",
+        })
+        analyzer = AttendanceAnalyzer(df)
+        records = analyzer.compute_summary().to_dict(orient="records")
+        subject_map = {r["code"]: r for r in records}
+    except Exception:
+        records = []
+        subject_map = {}
+
+    timetable = TimetableScraper(scraper.session).get_timetable()
+    user_plan = PlanService.get_plan(uid)
+
+    calendar_data = get_month_calendar_data(
+        year=now.year,
+        month=now.month,
+        timetable_data=timetable,
+        user_plans=user_plan.get("plans", {}),
+    )
+
+    today_day = next((d for d in calendar_data.get("days", []) if d.get("date") == today_str), None)
+
+    # Enrich today's scheduled classes with live subject metrics
+    if today_day and "classes" in today_day:
+        for cls in today_day["classes"]:
+            sub = subject_map.get(cls["subject_code"])
+            if not sub:
+                for code, rec in subject_map.items():
+                    if _match_code(code, cls["subject_code"]):
+                        sub = rec
+                        break
+            if sub:
+                cls["percentage"] = float(sub.get("percentage", 0.0))
+                cls["bunk_budget"] = int(sub.get("bunk_budget", 0))
+                cls["status"] = sub.get("status", "Safe")
+                cls["attended"] = int(sub.get("attended", 0))
+                cls["conducted"] = int(sub.get("conducted", 0))
+
+    return {
+        "today": today_day,
+        "saved_plan": user_plan.get("plans", {}).get(today_str),
+        "all_plans": user_plan.get("plans", {}),
+        "date_str": today_str,
+        "formatted_date": now.strftime("%A, %d %B %Y"),
     }
 
 
